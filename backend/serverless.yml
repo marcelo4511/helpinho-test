@@ -1,0 +1,53 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: marcelobs96
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: backend
+service: serverless-dynamodb
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  region: us-east-1
+  endpoint: http://localhost:4566
+  environment:
+    DYNAMODB_TABLE: UsersTable
+
+functions:
+
+  createUser:
+    handler: handler.createUser
+    events:
+      - http:
+          path: user
+          method: post
+
+  # getUser:
+  #   handler: handler.getUser
+  #   events:
+  #     - http:
+  #         path: user/{id}
+  #         method: get
+
+resources:
+  Resources:
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+plugins:
+  - serverless-offline
+
+
+  #   custom:
+  # localstack:
+  #   stages:
+  #     - local

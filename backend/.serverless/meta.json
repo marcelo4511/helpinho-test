@@ -1,0 +1,223 @@
+{
+  "unknown": {
+    "versionSfCore": null,
+    "versionFramework": "4.3.2",
+    "isWithinCompose": false,
+    "composeOrgName": null,
+    "composeServiceName": null,
+    "command": [],
+    "options": {},
+    "error": null,
+    "machineId": "6dd9291635e30008b02df55824db59da",
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  },
+  "C:\\laragon\\www\\Helpinho\\backend": {
+    "versionSfCore": null,
+    "versionFramework": "4.3.2",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeResolverProviders": {
+      "default-aws-credential-resolver": "<REDACTED>",
+      "self": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "org": "marcelobs96",
+            "app": "backend",
+            "service": "serverless-dynamodb",
+            "provider": {
+              "name": "aws",
+              "runtime": "nodejs18.x",
+              "stage": "dev",
+              "region": "us-east-1",
+              "endpoint": "http://localhost:4566",
+              "environment": {
+                "DYNAMODB_TABLE": "UsersTable"
+              },
+              "versionFunctions": true
+            },
+            "functions": {
+              "createUser": {
+                "handler": "handler.createUser",
+                "events": [
+                  {
+                    "http": {
+                      "path": "user",
+                      "method": "post"
+                    }
+                  }
+                ]
+              },
+              "getUser": {
+                "handler": "handler.getUser",
+                "events": [
+                  {
+                    "http": {
+                      "path": "user/{id}",
+                      "method": "get"
+                    }
+                  }
+                ]
+              }
+            },
+            "resources": {
+              "Resources": {
+                "UsersTable": {
+                  "Type": "AWS::DynamoDB::Table",
+                  "Properties": {
+                    "TableName": "UsersTable",
+                    "AttributeDefinitions": [
+                      {
+                        "AttributeName": "id",
+                        "AttributeType": "S"
+                      }
+                    ],
+                    "KeySchema": [
+                      {
+                        "AttributeName": "id",
+                        "KeyType": "HASH"
+                      }
+                    ],
+                    "BillingMode": "PAY_PER_REQUEST"
+                  }
+                }
+              }
+            },
+            "plugins": [
+              "serverless-offline"
+            ]
+          },
+          "configFileDirPath": "C:\\laragon\\www\\Helpinho\\backend",
+          "config": {
+            "type": "self"
+          },
+          "options": {},
+          "stage": "dev",
+          "dashboard": null,
+          "logger": {
+            "namespace": "s:core:resolver:self",
+            "prefix": null,
+            "prefixColor": null
+          },
+          "_credentialsPromise": "<REDACTED>"
+        },
+        "resolvers": {}
+      }
+    },
+    "composeServiceName": null,
+    "servicePath": "C:\\laragon\\www\\Helpinho\\backend",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "org": "marcelobs96",
+      "app": "backend",
+      "service": "serverless-dynamodb",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "stage": "dev",
+        "region": "us-east-1",
+        "endpoint": "http://localhost:4566",
+        "environment": {
+          "DYNAMODB_TABLE": "UsersTable"
+        },
+        "versionFunctions": true
+      },
+      "functions": {
+        "createUser": {
+          "handler": "handler.createUser",
+          "events": [
+            {
+              "http": {
+                "path": "user",
+                "method": "post"
+              }
+            }
+          ]
+        },
+        "getUser": {
+          "handler": "handler.getUser",
+          "events": [
+            {
+              "http": {
+                "path": "user/{id}",
+                "method": "get"
+              }
+            }
+          ]
+        }
+      },
+      "resources": {
+        "Resources": {
+          "UsersTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "UsersTable",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "id",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "id",
+                  "KeyType": "HASH"
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST"
+            }
+          }
+        }
+      },
+      "plugins": [
+        "serverless-offline"
+      ]
+    },
+    "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\r\norg: marcelobs96\r\n# \"app\" enables Serverless Framework Dashboard features and sharing them with other Services.\r\napp: backend\r\nservice: serverless-dynamodb\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  stage: dev\r\n  region: us-east-1\r\n  endpoint: http://localhost:4566\r\n  environment:\r\n    DYNAMODB_TABLE: UsersTable\r\n\r\nfunctions:\r\n  createUser:\r\n    handler: handler.createUser\r\n    events:\r\n      - http:\r\n          path: user\r\n          method: post\r\n\r\n  getUser:\r\n    handler: handler.getUser\r\n    events:\r\n      - http:\r\n          path: user/{id}\r\n          method: get\r\n\r\nresources:\r\n  Resources:\r\n    UsersTable:\r\n      Type: AWS::DynamoDB::Table\r\n      Properties:\r\n        TableName: ${self:provider.environment.DYNAMODB_TABLE}\r\n        AttributeDefinitions:\r\n          - AttributeName: id\r\n            AttributeType: S\r\n        KeySchema:\r\n          - AttributeName: id\r\n            KeyType: HASH\r\n        BillingMode: PAY_PER_REQUEST\r\n\r\nplugins:\r\n  - serverless-offline",
+    "command": [
+      "ofline"
+    ],
+    "options": {},
+    "error": {
+      "message": "Serverless command \"ofline\" not found. Did you mean \"offline\"? Run \"serverless help\" for a list of all available commands.",
+      "code": "UNRECOGNIZED_CLI_COMMAND"
+    },
+    "params": {},
+    "machineId": "f059460ab756461d13026502241b0b48",
+    "stage": "dev",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "b6d6f3f4-4896-48f6-8ac1-251cc7dd3c7c",
+    "orgName": "marcelobs96",
+    "userId": "hW62zY05339XlByHKz",
+    "dashboard": {
+      "isEnabledForService": true,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": {
+        "providers": false,
+        "monitoring": false
+      },
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": "QfPPPWVQjlLJmP3HFY",
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "marcelobs96",
+    "subscription": null,
+    "userEmail": "marcelobs96@bol.com.br",
+    "projectType": "traditional",
+    "versionSf": "4.3.2",
+    "serviceProviderAwsCfStackName": "serverless-dynamodb-dev",
+    "serviceUniqueId": null,
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}
