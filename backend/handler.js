@@ -1,119 +1,94 @@
-module.exports.hello = async (event) => {
-    return {
-        statusCode: 200,
-        body: JSON.stringify(
-            {
-                message: 'Hello from local serverless!',
-            },
-            null,
-            2
-        ),
-    };
-};
-
-const AWS = require('aws-sdk');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
-
-const { USERS_TABLE, JWT_SECRET } = process.env;
-
-// Register User
-module.exports.registerUser = async (event) => {
-  const { email, password } = JSON.parse(event.body);
-
-    if (!email || !password) {
-        return {
-            statusCode: 400,
-            body: JSON.stringify({ message: 'Email and password are required' })
-        };
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const params = {
-        TableName: USERS_TABLE,
-        Item: {
-            email,
-            password: hashedPassword
-        }
-    };
-
-    try {
-        await dynamoDb.put(params).promise();
-        return {
-            statusCode: 201,
-            body: JSON.stringify({ message: 'User registered successfully' })
-        };
-    } catch (error) {
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ message: 'Error registering user', error })
-        };
-    }
-    };
-
-// Login User
-module.exports.loginUser = async (event) => {
-    const { email, password } = JSON.parse(event.body);
-
-    const params = {
-        TableName: USERS_TABLE,
-        Key: {
-            email
-        }
-    };
-
-  try {
-    const result = await dynamoDb.get(params).promise();
-
-    if (!result.Item) {
-        return {
-            statusCode: 404,
-            body: JSON.stringify({ message: 'User not found' })
-        };
-    }
-
-    const validPassword = await bcrypt.compare(password, result.Item.password);
-
-    if (!validPassword) {
-        return {
-            statusCode: 401,
-            body: JSON.stringify({ message: 'Invalid password' })
-        };
-    }
-
-    // Generate JWT
-    const token = jwt.sign({ email: result.Item.email }, JWT_SECRET, {
-        expiresIn: '1h'
-    });
-
-    return {
-        statusCode: 200,
-        body: JSON.stringify({ message: 'Login successful', token })
-    };
-  } catch (error) {
-    return {
-        statusCode: 500,
-        body: JSON.stringify({ message: 'Error logging in', error })
-    };
-  }
-};
-
-// Authenticated Route
-module.exports.authenticatedRoute = async (event) => {
-    const token = event.headers.Authorization.split(' ')[1]; // Extract Bearer token
-
-  try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+const userFunctions = require('./functions/user');
+module.exports.getUser = async (event) => {
+    const userId = event.pathParameters.id;
+        try {
+            const user = await userFunctions.getUserById(userId);
         return {
             statusCode: 200,
-            body: JSON.stringify({ message: 'Access granted', user: decoded })
+            body: JSON.stringify(user),
         };
-  } catch (error) {
+        } catch (error) {
         return {
-            statusCode: 401,
-            body: JSON.stringify({ message: 'Unauthorized', error })
+            statusCode: 404,
+            body: JSON.stringify({ error: error.message }),
         };
-  }
+    }
 };
+
+module.exports.users = async (event) => {
+    // O ID do usuário vem do authorizer
+    const userId = event.requestContext.authorizer.principalId;
+  
+    try {
+        const users = await connection.execute('SELECT * FROM users');
+        return {
+            statusCode: 200,
+            body: JSON.stringify(users),
+      };
+    } catch (error) {
+      return {
+            statusCode: 500,
+            body: JSON.stringify({ message: 'Internal Server Error' }),
+        };
+    }
+};
+
+// Função para registrar um usuário
+module.exports.register = async (event) => {
+    const data = JSON.parse(event.body);
+    try {
+        const result = await userFunctions.registerUser(data);
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ message: 'User registered successfully', userId: result.userId }),
+        };
+        } catch (error) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error: error.message }),
+        };
+    }
+};
+
+const { generateToken } = require('./auth'); 
+
+module.exports.login = async (event) => {
+    const { email, password } = JSON.parse(event.body);
+    
+    const user = { id: 1, email: email };
+  
+    const token = generateToken(user);
+  
+    return {
+        statusCode: 200,
+        body: JSON.stringify({ user,token }),
+    };
+  };
+
+    // module.exports.protectedRoute = async (event) => {
+    //     return {
+    //         statusCode: 200,
+    //         body: JSON.stringify({ message: 'Protected content' }),
+    //     };
+    // };
+  
+  // Função para autenticar um usuário
+    // module.exports.login = async (event) => {
+    //     const data = JSON.parse(event.body);
+    //     try {
+    //     const result = await userFunctions.loginUser(data);
+    //         return {
+    //             statusCode: 200,
+    //             body: JSON.stringify({ message: 'User logged in successfully', userId: result.userId }),
+    //         };
+    //         } catch (error) {
+    //         return {
+    //             statusCode: 401,
+    //             body: JSON.stringify({ error: error.message }),
+    //         };
+    //     }
+    // };
+  
+    
+ 
+  

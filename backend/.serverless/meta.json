@@ -23,25 +23,52 @@
     "composeOrgName": null,
     "composeResolverProviders": {
       "default-aws-credential-resolver": "<REDACTED>",
-      "self": {
+      "env": {
         "instance": {
           "credentials": "<REDACTED>",
           "serviceConfigFile": {
             "org": "marcelobs96",
             "app": "backend",
-            "service": "serverless-dynamodb",
+            "service": "mysql-serverless",
             "provider": {
               "name": "aws",
               "runtime": "nodejs18.x",
+              "environment": {
+                "DB_HOST": "127.0.0.1",
+                "DB_USER": "root",
+                "DB_PASSWORD": "<REDACTED>",
+                "DB_NAME": "helpinho",
+                "JWT_SECRET": "<REDACTED>"
+              },
               "stage": "dev",
               "region": "us-east-1",
-              "endpoint": "http://localhost:4566",
-              "environment": {
-                "DYNAMODB_TABLE": "UsersTable"
-              },
               "versionFunctions": true
             },
             "functions": {
+              "register": {
+                "handler": "handler.register",
+                "events": [
+                  {
+                    "http": {
+                      "path": "user/register",
+                      "method": "post"
+                    }
+                  }
+                ],
+                "name": "mysql-serverless-dev-register"
+              },
+              "login": {
+                "handler": "handler.login",
+                "events": [
+                  {
+                    "http": {
+                      "path": "user/login",
+                      "method": "post"
+                    }
+                  }
+                ],
+                "name": "mysql-serverless-dev-login"
+              },
               "createUser": {
                 "handler": "handler.createUser",
                 "events": [
@@ -51,7 +78,8 @@
                       "method": "post"
                     }
                   }
-                ]
+                ],
+                "name": "mysql-serverless-dev-createUser"
               },
               "getUser": {
                 "handler": "handler.getUser",
@@ -62,45 +90,47 @@
                       "method": "get"
                     }
                   }
-                ]
-              }
-            },
-            "resources": {
-              "Resources": {
-                "UsersTable": {
-                  "Type": "AWS::DynamoDB::Table",
-                  "Properties": {
-                    "TableName": "UsersTable",
-                    "AttributeDefinitions": [
-                      {
-                        "AttributeName": "id",
-                        "AttributeType": "S"
+                ],
+                "name": "mysql-serverless-dev-getUser"
+              },
+              "protectedRoute": {
+                "handler": "handler.protectedRoute",
+                "events": [
+                  {
+                    "http": {
+                      "path": "/protected",
+                      "method": "get",
+                      "authorizer": {
+                        "name": "authorizer",
+                        "type": "token",
+                        "identitySource": "method.request.header.Authorization"
                       }
-                    ],
-                    "KeySchema": [
-                      {
-                        "AttributeName": "id",
-                        "KeyType": "HASH"
-                      }
-                    ],
-                    "BillingMode": "PAY_PER_REQUEST"
+                    }
                   }
-                }
+                ],
+                "name": "mysql-serverless-dev-protectedRoute"
               }
             },
             "plugins": [
               "serverless-offline"
-            ]
+            ],
+            "custom": {
+              "scripts": {
+                "hooks": {
+                  "before:deploy:deploy": "npm run migrate"
+                }
+              }
+            }
           },
           "configFileDirPath": "C:\\laragon\\www\\Helpinho\\backend",
           "config": {
-            "type": "self"
+            "type": "env"
           },
           "options": {},
           "stage": "dev",
           "dashboard": null,
           "logger": {
-            "namespace": "s:core:resolver:self",
+            "namespace": "s:core:resolver:env",
             "prefix": null,
             "prefixColor": null
           },
@@ -115,19 +145,46 @@
     "service": {
       "org": "marcelobs96",
       "app": "backend",
-      "service": "serverless-dynamodb",
+      "service": "mysql-serverless",
       "provider": {
         "name": "aws",
         "runtime": "nodejs18.x",
+        "environment": {
+          "DB_HOST": "127.0.0.1",
+          "DB_USER": "root",
+          "DB_PASSWORD": "<REDACTED>",
+          "DB_NAME": "helpinho",
+          "JWT_SECRET": "<REDACTED>"
+        },
         "stage": "dev",
         "region": "us-east-1",
-        "endpoint": "http://localhost:4566",
-        "environment": {
-          "DYNAMODB_TABLE": "UsersTable"
-        },
         "versionFunctions": true
       },
       "functions": {
+        "register": {
+          "handler": "handler.register",
+          "events": [
+            {
+              "http": {
+                "path": "user/register",
+                "method": "post"
+              }
+            }
+          ],
+          "name": "mysql-serverless-dev-register"
+        },
+        "login": {
+          "handler": "handler.login",
+          "events": [
+            {
+              "http": {
+                "path": "user/login",
+                "method": "post"
+              }
+            }
+          ],
+          "name": "mysql-serverless-dev-login"
+        },
         "createUser": {
           "handler": "handler.createUser",
           "events": [
@@ -137,7 +194,8 @@
                 "method": "post"
               }
             }
-          ]
+          ],
+          "name": "mysql-serverless-dev-createUser"
         },
         "getUser": {
           "handler": "handler.getUser",
@@ -148,44 +206,48 @@
                 "method": "get"
               }
             }
-          ]
-        }
-      },
-      "resources": {
-        "Resources": {
-          "UsersTable": {
-            "Type": "AWS::DynamoDB::Table",
-            "Properties": {
-              "TableName": "UsersTable",
-              "AttributeDefinitions": [
-                {
-                  "AttributeName": "id",
-                  "AttributeType": "S"
+          ],
+          "name": "mysql-serverless-dev-getUser"
+        },
+        "protectedRoute": {
+          "handler": "handler.protectedRoute",
+          "events": [
+            {
+              "http": {
+                "path": "/protected",
+                "method": "get",
+                "authorizer": {
+                  "name": "authorizer",
+                  "type": "token",
+                  "identitySource": "method.request.header.Authorization"
                 }
-              ],
-              "KeySchema": [
-                {
-                  "AttributeName": "id",
-                  "KeyType": "HASH"
-                }
-              ],
-              "BillingMode": "PAY_PER_REQUEST"
+              }
             }
-          }
+          ],
+          "name": "mysql-serverless-dev-protectedRoute"
         }
       },
       "plugins": [
         "serverless-offline"
-      ]
+      ],
+      "custom": {
+        "scripts": {
+          "hooks": {
+            "before:deploy:deploy": "npm run migrate"
+          }
+        }
+      }
     },
-    "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\r\norg: marcelobs96\r\n# \"app\" enables Serverless Framework Dashboard features and sharing them with other Services.\r\napp: backend\r\nservice: serverless-dynamodb\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  stage: dev\r\n  region: us-east-1\r\n  endpoint: http://localhost:4566\r\n  environment:\r\n    DYNAMODB_TABLE: UsersTable\r\n\r\nfunctions:\r\n  createUser:\r\n    handler: handler.createUser\r\n    events:\r\n      - http:\r\n          path: user\r\n          method: post\r\n\r\n  getUser:\r\n    handler: handler.getUser\r\n    events:\r\n      - http:\r\n          path: user/{id}\r\n          method: get\r\n\r\nresources:\r\n  Resources:\r\n    UsersTable:\r\n      Type: AWS::DynamoDB::Table\r\n      Properties:\r\n        TableName: ${self:provider.environment.DYNAMODB_TABLE}\r\n        AttributeDefinitions:\r\n          - AttributeName: id\r\n            AttributeType: S\r\n        KeySchema:\r\n          - AttributeName: id\r\n            KeyType: HASH\r\n        BillingMode: PAY_PER_REQUEST\r\n\r\nplugins:\r\n  - serverless-offline",
+    "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\r\norg: marcelobs96\r\n# \"app\" enables Serverless Framework Dashboard features and sharing them with other Services.\r\napp: backend\r\nservice: mysql-serverless\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  environment:\r\n    DB_HOST: 127.0.0.1     # Substitua pelo host do seu banco de dados MySQL\r\n    DB_USER: root     # Substitua pelo nome de usuário do banco de dados MySQL\r\n    DB_PASSWORD: ''  # Substitua pela senha do banco de dados MySQL\r\n    DB_NAME: helpinho     # Substitua pelo nome do banco de dados MySQL\r\n    JWT_SECRET: ${env:JWT_SECRET}\r\n\r\nfunctions:\r\n  register:\r\n    handler: handler.register\r\n    events:\r\n      - http:\r\n          path: user/register\r\n          method: post\r\n\r\n  login:\r\n    handler: handler.login\r\n    events:\r\n      - http:\r\n          path: user/login\r\n          method: post\r\n  createUser:\r\n    handler: handler.createUser\r\n    events:\r\n      - http:\r\n          path: user\r\n          method: post\r\n  getUser:\r\n    handler: handler.getUser\r\n    events:\r\n      - http:\r\n          path: user/{id}\r\n          method: get\r\n\r\n\r\n  protectedRoute:\r\n    handler: handler.protectedRoute\r\n    events:\r\n      - http:\r\n          path: /protected\r\n          method: get\r\n          authorizer:\r\n            name: authorizer\r\n            type: token\r\n            identitySource: 'method.request.header.Authorization'\r\n\r\n\r\nplugins:\r\n  - serverless-offline\r\n\r\ncustom:\r\n  scripts:\r\n    hooks:\r\n      'before:deploy:deploy': npm run migrate\r\n\r\n",
     "command": [
-      "ofline"
+      "offline",
+      "start"
     ],
     "options": {},
     "error": {
-      "message": "Serverless command \"ofline\" not found. Did you mean \"offline\"? Run \"serverless help\" for a list of all available commands.",
-      "code": "UNRECOGNIZED_CLI_COMMAND"
+      "message": "Function \"authorizer\" doesn't exist in this Service",
+      "stack": "ServerlessError2: Function \"authorizer\" doesn't exist in this Service\n    at Service.getFunction (file:///C:/Users/Marcelo/.serverless/releases/4.3.2/package/dist/sf-core.js:914:12903)\n    at #configureAuthorization (file:///C:/laragon/www/Helpinho/backend/node_modules/serverless-offline/src/events/http/HttpServer.js:326:51)\n    at #setAuthorizationStrategy (file:///C:/laragon/www/Helpinho/backend/node_modules/serverless-offline/src/events/http/HttpServer.js:432:37)\n    at HttpServer.createRoutes (file:///C:/laragon/www/Helpinho/backend/node_modules/serverless-offline/src/events/http/HttpServer.js:1027:60)\n    at #createEvent (file:///C:/laragon/www/Helpinho/backend/node_modules/serverless-offline/src/events/http/Http.js:41:22)\n    at file:///C:/laragon/www/Helpinho/backend/node_modules/serverless-offline/src/events/http/Http.js:46:24\n    at Array.forEach (<anonymous>)\n    at Http.create (file:///C:/laragon/www/Helpinho/backend/node_modules/serverless-offline/src/events/http/Http.js:45:12)\n    at #createHttp (file:///C:/laragon/www/Helpinho/backend/node_modules/serverless-offline/src/ServerlessOffline.js:201:16)\n    at async Promise.all (index 0)",
+      "code": "FUNCTION_MISSING_IN_SERVICE"
     },
     "params": {},
     "machineId": "f059460ab756461d13026502241b0b48",
@@ -212,7 +274,7 @@
     "userEmail": "marcelobs96@bol.com.br",
     "projectType": "traditional",
     "versionSf": "4.3.2",
-    "serviceProviderAwsCfStackName": "serverless-dynamodb-dev",
+    "serviceProviderAwsCfStackName": "mysql-serverless-dev",
     "serviceUniqueId": null,
     "serviceProviderAwsCfStackId": null,
     "serviceProviderAwsCfStackCreated": null,
