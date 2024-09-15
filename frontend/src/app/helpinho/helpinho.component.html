@@ -1,5 +1,5 @@
 
-<div class="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg">
+<form class="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg" (ngSubmit)="onSubmit()" #form="ngForm">
     <div class="flex mb-6">
         
         <div class="mx-auto bg-white shadow-lg border border-gray-300 rounded-lg overflow-hidden flex justify-between p-5">
@@ -52,7 +52,6 @@
   
     @if(currentStep === 0){
         <div class="space-y-4">   
-            
             <h2 class="text-xl font-semibold">Em que categoria se encaixa seu helpinho ?</h2>
             <h6>Escolha pelo menos uma das categorias abaixo que represente seu Helpinho</h6>
             <form>
@@ -115,19 +114,29 @@
                 <div class="flex flex-col space-y-4">
                     <label class="flex flex-col">
                         Título do helpinho
-                        <input type="text" class="mt-1 p-2 border border-gray-300 rounded" name="address"/>
+                        <input type="text" class="mt-1 p-2 border border-gray-300 rounded"  #titleField="ngModel" [(ngModel)]="title" name="titulo"/>
+                        <div *ngIf="titleField.invalid && titleField.touched" class="error">
+                            O título é obrigatório.
+                        </div>
                     </label>
                     <div class="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
                         <label class="cursor-pointer">
                             <span class="block text-gray-700 font-semibold">Selecione</span>
-                            <input type="file"  class="hidden" />
+                            <input type="file"  class="hidden" (change)="onFileSelected($event)"/>
                         </label>
+                        <!-- <input id="image" type="file" (change)="onFileSelected($event)" /> -->
+                        <div *ngIf="!image" class="error">
+                          A imagem é obrigatória.
+                        </div>
                         <p class="mt-2 text-gray-500">ou arraste uma foto para representar seu helpinho, SVG, PNG, JPG ou GIF (max: 800x400)</p>
                     </div>
                     <label class="flex flex-col">
                         Descrição
                     </label>
-                    <textarea type="text" rows="10" class="mt-1 p-2 border border-gray-300 rounded" name="city"></textarea>
+                    <textarea type="text" rows="10" class="mt-1 p-2 border border-gray-300 rounded" [(ngModel)]="description" #descriptionField="ngModel" name="descricao"></textarea>
+                    <div *ngIf="descriptionField.invalid && descriptionField.touched" class="error">
+                            A descrição é obrigatória e deve ter entre 10 e 500 caracteres.
+                        </div>
                     <div class="flex justify-end">
                         <button 
                             (click)="prevStep()" 
@@ -206,4 +215,4 @@
             </div>
         </div>
     }
-</div>
+</form>

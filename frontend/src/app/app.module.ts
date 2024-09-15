@@ -8,6 +8,8 @@ import { RegisterComponent } from './regster/register.component';
 import { HomeComponent } from './home/home.component';
 import { CommonModule } from '@angular/common';
 import { HelpinhoComponent } from './helpinho/helpinho.component';
+import { provideHttpClient } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,8 +23,12 @@ import { HelpinhoComponent } from './helpinho/helpinho.component';
     CommonModule,
     RouterModule,
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
     AppRoutingModule
   ],
+  providers: [provideHttpClient()],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

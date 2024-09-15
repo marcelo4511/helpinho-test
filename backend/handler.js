@@ -1,4 +1,7 @@
 const userFunctions = require('./functions/user');
+const helpinhoFunctions = require('./functions/helpinho');
+
+
 module.exports.getUser = async (event) => {
     const userId = event.pathParameters.id;
         try {
@@ -33,6 +36,27 @@ module.exports.users = async (event) => {
     }
 };
 
+module.exports.createHelpinho = async (event) => {
+    const data = JSON.parse(event.body);
+    try {
+        const result = await helpinhoFunctions.createHelpinho(data);
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ message: 'Helpinho registered successfully', helpinhoId: result.helpinhoId }),
+        };
+        } catch (error) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error: error.message }),
+        };
+    }
+};
+
+
+// module.exports.createHelpinho = async (event) => {
+    
+//   };
+
 // Função para registrar um usuário
 module.exports.register = async (event) => {
     const data = JSON.parse(event.body);
@@ -54,7 +78,12 @@ const { generateToken } = require('./auth');
 
 module.exports.login = async (event) => {
     const { email, password } = JSON.parse(event.body);
-    
+        if (!email || !password) {
+            return {
+            statusCode: 422,
+            body: JSON.stringify({ message: 'E-mail e senha são obrigatórios' }),
+        };
+    }
     const user = { id: 1, email: email };
   
     const token = generateToken(user);

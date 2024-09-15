@@ -1,0 +1,125 @@
+<div class="p-0">
+    <nav class="flex items-start justify-between flex-wrap bg-pink-200 p-6" style="height: 400px;">
+        <div class="flex items-start flex-shrink-0 text-white mr-6">
+            <svg class="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z"/></svg>
+            <span class="font-semibold text-xl tracking-tight">Helpinho</span>
+        </div>
+        <div class="block lg:hidden">
+            <button class="flex items-center px-3 py-2 border rounded text-pink-200 border-pink-100 hover:text-white hover:border-white">
+                <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+            </button>
+        </div>
+        <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+            <div class="text-sm lg:flex-grow">
+                <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800 mr-4">
+                Helpinho
+                </a>
+                <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800 mr-4">
+                Pesquisa
+                </a>
+                <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800">
+                Sobre
+                </a>
+            </div>
+            <div class="flex justify-between ml-2">
+                <a  routerLink="/register" class="inline-block text-sm px-4 py-2 bg-slate-100 border rounded rounded-lg text-pink-800 border-white mt-4 lg:mt-0 mr-2">Registre-se</a>
+
+                <a  routerLink="/register" class="inline-block text-sm px-4 py-2 bg-pink-600 border rounded rounded-lg text-white border-white mt-4 lg:mt-0">login</a>
+            </div>
+        </div>
+    </nav>
+    <div class="mx-auto bg-white overflow-hidden flex justify-between p-5 mt-5 mb-5">
+        <div class="flex justify-between ml-2">
+            <div class="p-2">
+                <h1 class="text-pink-800 xl text-4xl font-bold" style="height: 40px;"> 1.</h1>
+            </div>
+            
+            <div class="ml-2">
+                <p class="text-red-600 font-bold">Escolha</p>
+                <p class="text-gray-500">Escolha um helpinho que deseja ajudar</p>
+            </div>
+            
+            <div class="p-2">
+                <h1 class="text-pink-800 xl text-4xl font-bold" style="height: 40px;"> 2.</h1>
+            </div>
+            
+            <div class="ml-2">
+                <p class="text-red-600 font-bold">Doe</p>
+                <p class="text-gray-500">O valor é você que decide, e ele vai todo para quem escolher</p>
+            </div>
+
+            <div class="p-2">
+                <h1 class="text-pink-800 xl text-4xl font-bold" style="height: 40px;"> 3.</h1>
+            </div>
+            
+            <div class="ml-2">
+                <p class="text-red-600 font-bold">Aproveite</p>
+                <p class="text-gray-500">Doar gera felicidade para você e para quem recebeu</p>
+            </div>
+
+            <div class="p-2">
+                <h1 class="text-pink-800 xl text-4xl font-bold" style="height: 40px;"> 4.</h1>
+            </div>
+            
+            <div class="ml-2">
+                <p class="text-red-600 font-bold">Acompanhe</p>
+                <p class="text-gray-500">Fique ligado, Acompanhe se o helpinho alcançou o objetivo</p>
+            </div>
+        </div>
+    
+    </div>
+    <div class="flex justify-center">
+
+   
+        <form class="max-w-sm mx-auto">   
+            <label for="default-search" class="mt-4 mb-3 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+                <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="quem vamos ajudar hoje ?" required />
+            </div>
+        </form>
+        <form class="max-w-sm mx-auto">
+            <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option selected>Escolha uma categoria</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="FR">France</option>
+                <option value="DE">Germany</option>
+            </select>
+        </form>
+    </div>
+    <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <a  routerLink="/register">
+            <img class="rounded-t-lg" src="/docs/images/blog/image-1.jpg" alt="" />
+        </a>
+        <div class="p-5">
+            <a  routerLink="/register">
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
+            </a>
+            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
+            <a  routerLink="/register" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                Read more
+                 <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+    
+
+    <footer class="bg-white rounded-lg shadow m-4 dark:bg-gray-800">
+        <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+       
+        <!-- <img src="assets/header.svg" alt="Example Image" class="w-full h-auto rounded-lg" /> -->
+        <div id="logo"></div>
+
+        <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2077 <a href="https://flowbite.com/" class="hover:underline">Helpinho</a>. Todos os direitos reservados.
+        </span>
+    </div>
+</footer>
+
+</div>

@@ -7,6 +7,11 @@ service: mysql-serverless
 provider:
   name: aws
   runtime: nodejs18.x
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource: arn:aws:s3:::develop/*
   environment:
     DB_HOST: 127.0.0.1     # Substitua pelo host do seu banco de dados MySQL
     DB_USER: root     # Substitua pelo nome de usuário do banco de dados MySQL
@@ -41,6 +46,13 @@ functions:
       - http:
           path: user/{id}
           method: get
+  
+  createHelpinho:
+    handler: handler.createHelpinho
+    events:
+      - http:
+          path: helpinho/create
+          method: post
 
 authorizer:
     handler: authorizer.handler
