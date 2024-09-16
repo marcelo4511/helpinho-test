@@ -1,7 +1,12 @@
 // functions/user.js
 const { getConnection } = require('../utils/db');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const mysql = require('mysql2/promise');
+const express = require('express');
 
+const app = express();
+app.use(express.json());
 // Criar um novo usuário
 module.exports.createUser = async (data) => {
     const connection = await getConnection();
@@ -54,38 +59,33 @@ module.exports.registerUser = async (data) => {
             'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
             [name, email, hashedPassword]
         );
-        await connection.end();
-        return { success: true, userId: result.insertId };
+            await connection.end();
+            return { success: true, userId: result.insertId };
         } catch (error) {
-        await connection.end();
-        throw new Error(error.message);
+            await connection.end();
+            throw new Error(error.message);
         }
     };
   
   // Autenticar um usuário
-    module.exports.loginUser = async (data) => {
-        const { email, password } = data;
-        const connection = await getConnection();
-    
-        try {
-        // Buscar o usuário pelo e-mail
-        const [rows] = await connection.execute('SELECT * FROM users WHERE email = ?', [email]);
-        if (rows.length === 0) {
-            throw new Error('Invalid email or password');
-        }
-    
-        const user = rows[0];
-    
-        // Comparar a senha fornecida com a senha armazenada
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            throw new Error('Invalid email or password');
-        }
-    
-        await connection.end();
-        return { success: true, userId: user.id };
-        } catch (error) {
-        await connection.end();
-        throw new Error(error.message);
-        }
-   };
+    module.exports.loginUser = async (event) => {
+        console.log(event)
+
+      
+      
+        // app.get('/protected', (req, res) => {
+        //     const token = req.headers['authorization'];
+        
+        //     if (!token) {
+        //     return res.status(401).json({ error: 'Acesso negado. Token não fornecido.' });
+        //     }
+        
+        //     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        //     if (err) {
+        //         return res.status(401).json({ error: 'Token inválido' });
+        //     }
+        //     res.json({ message: 'Acesso concedido', user: decoded });
+        //     });
+        // });
+          
+};

@@ -46,6 +46,20 @@ functions:
       - http:
           path: user/{id}
           method: get
+
+  getHelpinhos:
+    handler: handler.getHelpinhos
+    events:
+      - http:
+          path: helpinhos/
+          method: get
+
+  getHelpinhosOffline:
+    handler: handler.getHelpinhosOffline
+    events:
+      - http:
+          path: helpinhos/offline
+          method: get
   
   createHelpinho:
     handler: handler.createHelpinho

@@ -53,13 +53,14 @@ export class HelpinhoComponent {
     }
 
     async onSubmit(): Promise<void> {
-
         if (this.title && this.description && this.image) {
             const formData = new FormData();
-            formData.append('title', this.title);
-            formData.append('description', this.description);
-            formData.append('image', this.image);
-          // Enviar o formulário para o backend via HTTP POST (exemplo)
+            formData.append('titulo', this.title);
+            formData.append('descricao', this.description);
+            formData.append('imagem', this.image);
+            formData.append('meta', this.description);
+            formData.append('solicitacao_id', '1')
+
             // this.http.post('http://localhost:3000/dev/helpinho/create', formData).subscribe(response => {
             //     console.log('Formulário enviado com sucesso', response);
             // });
@@ -67,10 +68,7 @@ export class HelpinhoComponent {
             try {
                 const response = await fetch('http://localhost:3000/dev/helpinho/create', {
                     method: 'POST',
-                    body: formData,
-                    headers: {
-                        // Defina headers se necessário; lembre-se de que o FormData lida com a maioria dos headers necessários para uploads de arquivos
-                    }
+                    body: formData
                 });
           
                 if (!response.ok) {
@@ -78,13 +76,12 @@ export class HelpinhoComponent {
                 }
           
                 const result =  response.json();
-                    console.log('Success:', result);
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            
+                console.log('Success:', result);
+            } catch (error) {
+                console.error('Error:', error);
+            }
     
-          console.log('Formulário enviado:', formData);
+            console.log('Formulário enviado:', formData);
         }
     }
 }  

@@ -12,7 +12,7 @@ export class AuthService {
 
     constructor(private router: Router) {
         if (this.isLocalStorageAvailable()) {
-            this.currentUserToken = localStorage.getItem('token');
+            this.currentUserToken = localStorage.getItem('authToken');
         }
     }
   
@@ -35,7 +35,6 @@ export class AuthService {
             }
             const data = await response.json();
             this.currentUserToken = data.token;
-
             if (this.isLocalStorageAvailable()) {
                 localStorage.setItem('authToken', this.currentUserToken!);
             }

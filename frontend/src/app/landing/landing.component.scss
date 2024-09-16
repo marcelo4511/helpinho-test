@@ -3,3 +3,10 @@
     width: 20px;
     height: 20px;
 }
+
+.transparent-div {
+    background-color: rgba(0, 0, 0, 0.5); /* Cor preta com 50% de transparência */
+    padding: 20px;
+    width: 300px; /* Defina o tamanho desejado */
+    height: 300px;
+  }
