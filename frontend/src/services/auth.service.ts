@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -7,8 +8,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
     private currentUserToken: string | null = null;
-
-    private apiUrl = ' http://localhost:3000/dev/user/login';
+    private apiUrl = 'http://localhost:3000/dev/user/login';
 
     constructor(private router: Router) {
         if (this.isLocalStorageAvailable()) {
@@ -29,7 +29,6 @@ export class AuthService {
             })
         })
         .then(async response => {
-            
             if (!response.ok) {
                 throw new Error('Erro na autenticação');
             }
@@ -45,6 +44,8 @@ export class AuthService {
             throw error;
         });
     }
+
+    
 
     isLoggedIn(): boolean {
         return !!this.currentUserToken;
@@ -75,5 +76,27 @@ export class AuthService {
             Authorization: `Bearer ${this.currentUserToken}`,
         };
         return fetch(url, { ...options, headers });
+    }
+
+    // Método para obter o usuário logado
+    async getLoggedUser(): Promise<void> {
+        fetch('http://localhost:3000/dev/user/loggeduser', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': this.isLocalStorageAvailable() ? `Bearer ${localStorage.getItem('authToken')}` : ''
+            }
+        })
+        .then(response => {
+            return response.json()
+        }).then(data => {
+            console.log(data)
+            return data
+        })
+        .catch(error => console.error('Erro ao obter usuário logado:', error));
+    }
+
+    getToken(): string | null {
+        return localStorage.getItem('authToken');
     }
 }

@@ -31,7 +31,6 @@ export class LandingComponent {
     this.getHelpinhos();
   }
 
-  // Método para consumir o serviço e pegar os helpinhos
   getHelpinhos() {
     this.helpinhoService.getHelpinhos().subscribe(
       (data) => {

@@ -7,14 +7,14 @@ import { Router } from '@angular/router';
 import { LandingService } from "../landing/landing.service";
 
 @Component({
-    selector: 'app-helpinho',
-    templateUrl: './helpinho.component.html',
+    selector: 'app-create-helpinho',
+    templateUrl: './create-helpinho.component.html',
     standalone: true,
     imports: [DecimalPipe, FormsModule, CommonModule, ReactiveFormsModule, HttpClientModule],
     providers: [LandingService]
 
 })
-export class HelpinhoComponent {
+export class CreateHelpinhoComponent {
     public currentStep = 0;
     
     public steps = ['Categoria do helpinho', 'Conhecendo o helpinho', 'Metas do helpinho', 'Revisando'];

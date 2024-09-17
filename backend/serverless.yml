@@ -47,6 +47,13 @@ functions:
           path: user/{id}
           method: get
 
+  getloggeduser:
+    handler: handler.getloggeduser
+    events:
+      - http:
+          path: user/loggeduser
+          method: get
+
   getHelpinhos:
     handler: handler.getHelpinhos
     events:
