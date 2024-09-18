@@ -3,20 +3,20 @@ import { HttpClient, HttpClientModule, HttpHeaders } from "@angular/common/http"
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AuthService } from "../../services/auth.service";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { LandingService } from "../landing/landing.service";
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-create-helpinho',
     templateUrl: './create-helpinho.component.html',
     standalone: true,
-    imports: [DecimalPipe, FormsModule, CommonModule, ReactiveFormsModule, HttpClientModule],
-    providers: [LandingService]
-
+    imports: [DecimalPipe, FormsModule, CommonModule, ReactiveFormsModule, NgxMaskDirective, NgxMaskPipe,HttpClientModule,RouterModule],
+    providers: [LandingService, provideNgxMask()]
 })
-export class CreateHelpinhoComponent {
+export class createHelpinhoComponent {
     public currentStep = 0;
-    
     public steps = ['Categoria do helpinho', 'Conhecendo o helpinho', 'Metas do helpinho', 'Revisando'];
     public valores = [5000, 1000, 2000, 100000, 200000];
     public categorias = ['Jogos', 'Saude', 'Música', 'Reforma', 'Emergencia', 'Hospitalar'];
@@ -32,14 +32,15 @@ export class CreateHelpinhoComponent {
     previewImageUrl: string | ArrayBuffer | null = '';
 
     user: any[] = [];  
-    constructor(private http: HttpClient, private authService: AuthService, private helpinhoService: LandingService,
+    constructor(private http: HttpClient, private authService: AuthService, private helpinhoService: LandingService,private route: ActivatedRoute,
+        private router: Router,
+        private toastr: ToastrService,
+
         private fb: FormBuilder) {
             this.form = this.fb.group({
-                titulo: ['', [Validators.required, Validators.minLength(3)]],
-                descricao: ['', [Validators.required, Validators.email]],
-                image: ['', [Validators.required]],
-            }) } 
-    
+                valor: ['', [Validators.required]],
+            }) 
+        } 
   
     setStep(index: number) {
         this.currentStep = index;
@@ -76,6 +77,8 @@ export class CreateHelpinhoComponent {
       }
 
     async onSubmit(): Promise<void> {
+        this.toastr.success('Até breve');
+
         console.log('aeee')
         this.submitted = true;
         // if (this.form.invalid) {
@@ -95,7 +98,7 @@ export class CreateHelpinhoComponent {
             formData.append('meta', this.form.value.descricao);
             formData.append('solicitante', '1')
             try {
-                this.http.post('http://localhost:3000/dev/helpinho/create', formData, { headers }).subscribe(
+                this.http.post('http://localhost:3000/dev/helpinho/solicitation/create', formData, { headers }).subscribe(
                     (data) => {
                         console.log(data)
                     },
@@ -120,8 +123,20 @@ export class CreateHelpinhoComponent {
 
     async ngOnInit() {
         this.getuser()  
-    }
+        //this.getSolicitacaoHelpinho(this.route.snapshot.params["id"]);
 
+    }
+    getTutorial(id: string): void {
+        // this.http.get(`${baseUrl}/${id}`);
+        // .subscribe({
+        //     next: (data) => {
+        //     this.currentTutorial = data;
+        //         console.log(data);
+        //     },
+        //     error: (e) => console.error(e)
+        // });
+    }
+    
     getuser() {
         this.helpinhoService.getuser().subscribe(
             (data) => {

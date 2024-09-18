@@ -1,17 +1,22 @@
-import { CommonModule, DecimalPipe } from "@angular/common";
+import { CommonModule, CurrencyPipe, DecimalPipe } from "@angular/common";
 import { HttpClient, HttpClientModule, HttpHeaders } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AuthService } from "../../services/auth.service";
 import { Router } from '@angular/router';
 import { LandingService } from "../landing/landing.service";
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+import localePtExtra from '@angular/common/locales/extra/pt';
+import { LOCALE_ID } from '@angular/core';
 
+registerLocaleData(localePt, 'pt-BR', localePtExtra);
 @Component({
     selector: 'app-helpinho',
     templateUrl: './helpinho.component.html',
     standalone: true,
     imports: [DecimalPipe, FormsModule, CommonModule, ReactiveFormsModule, HttpClientModule],
-    providers: [LandingService]
+    providers: [LandingService, CurrencyPipe, { provide: LOCALE_ID, useValue: 'pt-BR' }]
 
 })
 export class HelpinhoComponent {
@@ -29,16 +34,16 @@ export class HelpinhoComponent {
     image: File | null = null;
     loggedUser: any;
     previewContent: string = '';
-    previewImageUrl: string | ArrayBuffer | null = '';
-
     user: any[] = [];  
+
     constructor(private http: HttpClient, private authService: AuthService, private helpinhoService: LandingService,
         private fb: FormBuilder) {
             this.form = this.fb.group({
                 titulo: ['', [Validators.required, Validators.minLength(3)]],
                 descricao: ['', [Validators.required, Validators.email]],
                 image: ['', [Validators.required]],
-            }) } 
+            }) 
+        } 
     
   
     setStep(index: number) {
@@ -59,24 +64,18 @@ export class HelpinhoComponent {
 
     onFileSelected(event: any): void {
         this.form.value.image = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = () => {
-            this.previewImageUrl = reader.result;
-            console.log(this.previewImageUrl)
-        };
-  
     }
 
     updatePreview(): void {
         this.previewContent = `
-            <h1>${this.form.value.titulo}</h1>
-            <p>${this.form.value.descricao}</p>
-            <img src="${this.form.value.image}" alt="Preview Image" style="max-width: 100%; height: auto;" />
+         <h1 class="text-2xl font-bold mb-2">${this.form.value.titulo}</h1>
+            <p class="text-gray-700">Descrição${this.form.value.descricao}</p>
+            <span class="inline-block bg-blue-200 text-blue-800 text-sm font-semibold mt-2 px-2.5 py-0.5 rounded-full">Meta: ${this.form.value.meta}</span>
+            <span class="inline-block bg-blue-200 text-blue-800 text-sm font-semibold mt-2 px-2.5 py-0.5 rounded-full">Categoria: ${this.form.value.meta}</span>
         `;
-      }
+    }
 
     async onSubmit(): Promise<void> {
-        console.log('aeee')
         this.submitted = true;
         // if (this.form.invalid) {
         //     return;
@@ -87,7 +86,6 @@ export class HelpinhoComponent {
             'Authorization': `Bearer ${this.authService.getToken()}`
         });
             
-            console.log('enre')
             const formData = new FormData();
             formData.append('titulo', this.form.value.titulo);
             formData.append('descricao', this.form.value.descricao);
@@ -95,7 +93,7 @@ export class HelpinhoComponent {
             formData.append('meta', this.form.value.descricao);
             formData.append('solicitante', '1')
             try {
-                this.http.post('http://localhost:3000/dev/helpinho/create', formData, { headers }).subscribe(
+                this.http.post('http://localhost:3000/dev/helpinho/solicitation/create', formData, { headers }).subscribe(
                     (data) => {
                         console.log(data)
                     },
@@ -105,7 +103,6 @@ export class HelpinhoComponent {
                 // }
           
                 //const result =  response.json();
-                //console.log('Success:', result);
             } catch (error) {
                 console.error('Error:', error);
             }

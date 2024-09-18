@@ -3,9 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
-    @Injectable({
-        providedIn: 'root',
-    })
+@Injectable({
+    providedIn: 'root',
+})
 export class LandingService {
     private apiUrl = 'http://localhost:3000/dev/helpinhos/offline'; // URL da API
 
@@ -13,10 +13,6 @@ export class LandingService {
     ) { }
 
     getHelpinhos(): Observable<any> {
-        // const headers = new HttpHeaders({
-        //     'Authorization': `Bearer ${token}`
-        // });
-
         return this.http.get(this.apiUrl, {  });
     }
 

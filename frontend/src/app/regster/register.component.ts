@@ -4,14 +4,13 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { RouterModule } from '@angular/router';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { Router } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-
+import { HttpClient, HttpClientModule } from '@angular/common/http'
 @Component({
   selector: 'register',
   standalone: true,
   templateUrl: './register.component.html',
   imports: [CommonModule, RouterModule, FormsModule, NgxMaskDirective, NgxMaskPipe,ReactiveFormsModule, HttpClientModule],
-  providers: [ provideNgxMask(),]
+  providers: [ provideNgxMask()]
 })
 export class RegisterComponent {
   form: FormGroup;

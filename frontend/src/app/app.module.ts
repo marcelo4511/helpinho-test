@@ -8,8 +8,9 @@ import { RegisterComponent } from './regster/register.component';
 import { HomeComponent } from './home/home.component';
 import { CommonModule } from '@angular/common';
 import { HelpinhoComponent } from './helpinho/helpinho.component';
-import { provideHttpClient } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -26,9 +27,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
     AppRoutingModule
   ],
-  providers: [provideHttpClient()],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

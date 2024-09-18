@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
   
   const upload = multer({ storage });
   
-module.exports.createHelpinho = async (event) => {
+module.exports.createSolicitationHelpinho = async (event) => {
     let connection;
     try {
         const token = event.headers.Authorization || event.headers.Authorization;

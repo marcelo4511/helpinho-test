@@ -41,19 +41,4 @@ export class LandingComponent {
       }
     );
   }
-
-  submit() {
-    console.log(this.email)
-    return
-    this.authService.login(this.email, this.password)
-      .then(response => {
-        console.log('Login bem-sucedido!', response);
-        this.router.navigate(['/login']);
-        // Lógica de sucesso: armazenar token, redirecionar, etc.
-      })
-      .catch(error => {
-        this.errorMessage = 'Falha no login. Verifique suas credenciais.';
-        console.error(error);
-      });
-  }
 }  

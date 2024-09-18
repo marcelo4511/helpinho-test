@@ -68,6 +68,13 @@ functions:
           path: helpinhos/offline
           method: get
   
+  createSolicitationHelpinho:
+    handler: handler.createSolicitationHelpinho
+    events:
+      - http:
+          path: helpinho/solicitation/create
+          method: post
+
   createHelpinho:
     handler: handler.createHelpinho
     events:

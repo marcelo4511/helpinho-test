@@ -42,7 +42,7 @@ module.exports.users = async (event) => {
     }
 };
 
-module.exports.createHelpinho = async (event) => {
+module.exports.createSolicitationHelpinho = async (event) => {
 
     try {
         let connection;
@@ -70,6 +70,44 @@ module.exports.createHelpinho = async (event) => {
         const [result] = await connection.execute(
             'INSERT INTO solicitation_helpinho (descricao, titulo, solicitante_id, meta, imagem) VALUES (?, ?, ?,?,?)',
             [descricao, titulo, solicitante_id, meta, imagem]
+        );
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                message: 'Dados salvos com sucesso no banco de dados',
+                insertId: result.insertId
+            })
+        };
+    } catch (err) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ message: 'Erro ao salvar no banco de dados', error: err.message })
+        };
+    }
+};
+
+module.exports.createHelpinho = async (event) => {
+
+    try {
+        let connection;
+        const decoded = verifyToken(event);
+        const data = JSON.parse(event.body);
+        const { valor, solicitacao_id, doador_id } = data;
+
+        // Se o token for inválido, retorna a mensagem de erro
+        if (decoded.statusCode) {
+            return decoded;
+        }
+
+        connection = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
+        });
+        const [result] = await connection.execute(
+            'INSERT INTO helpinho (valor, doador_id, solicitacao_id) VALUES (?, ?, ?)',
+            [valor, doador_id, solicitacao_id]
         );
         return {
             statusCode: 200,
@@ -148,7 +186,6 @@ const verifyToken = (event) => {
   module.exports.getHelpinhos = async (event) => {
     const decoded = verifyToken(event);
   
-    // Se o token for inválido, retorna a mensagem de erro
     if (decoded.statusCode) {
         return decoded;
     }
@@ -162,8 +199,11 @@ const verifyToken = (event) => {
             database: process.env.DB_NAME,
         });    
         // Consulta ao banco de dados para buscar os "helpinhos"
-        const [rows] = await connection.query('SELECT * FROM solicitation_helpinho WHERE solicitante_id = ?', [decoded.userId]);
-    
+        const [rows] = await connection.query(`
+            SELECT solicitation_helpinho.id, solicitation_helpinho.titulo, solicitation_helpinho.descricao, users.email, users.nome
+            FROM solicitation_helpinho
+            JOIN users ON solicitation_helpinho.solicitante_id = users.id
+        `);    
         // Fechar a conexão
         await connection.end();
   
@@ -190,18 +230,13 @@ module.exports.getHelpinhosOffline = async (event) => {
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
         });    
-        // Consulta ao banco de dados para buscar os "helpinhos"
-        const titleSearch = event.queryStringParameters?.title || '';
-        const descriptionSearch = event.queryStringParameters?.description || '';
-        const emailSearch = event.queryStringParameters?.email || '';
 
         const [rows] = await connection.query(`
-            SELECT solicitation_helpinho.id, solicitation_helpinho.titulo, solicitation_helpinho.descricao, users.email
+            SELECT solicitation_helpinho.id, solicitation_helpinho.titulo, solicitation_helpinho.descricao, users.email, users.nome
             FROM solicitation_helpinho
             JOIN users ON solicitation_helpinho.solicitante_id = users.id
-        
-        `);     
-        // Fechar a conexão
+        `);
+
         await connection.end();
   
         return {
@@ -244,12 +279,42 @@ module.exports.getloggeduser = async (event) => {
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
         });    
-        // Consulta ao banco de dados para buscar os "helpinhos"
         const [rows] = await connection.query('SELECT * FROM users WHERE id = ?', [decoded.userId]);
         return {
             statusCode: 200,
             body: JSON.stringify({ users: rows })
+        };
+    } catch (error) {
+        console.log(error)
+        return {
+            statusCode: 401,
+            body: JSON.stringify({ error: 'Token inválido' })
+        };
+    }
+};
 
+module.exports.teste = async (event) => {
+    const token = event.headers.Authorization && event.headers.Authorization.split(' ')[1]; // Extraindo o Bearer Token
+
+    if (!token) {
+        return {
+            statusCode: 401,
+            body: JSON.stringify({ error: 'é necessário fornecer o JSON Web Token' })
+        };
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);   
+        let connection;
+        connection = await mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
+        });    
+        const [rows] = await connection.query('SELECT * FROM users WHERE id = ?', [decoded.userId]);
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ users: rows })
         };
     } catch (error) {
         console.log(error)

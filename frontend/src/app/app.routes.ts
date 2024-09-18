@@ -6,7 +6,7 @@ import { HelpinhoComponent } from './helpinho/helpinho.component';
 import { AuthGuard } from './auth.guard';
 import { LandingComponent } from './landing/landing.component';
 import { NgModule } from '@angular/core';
-import { CreateHelpinhoComponent } from './createhelpinho/create-helpinho.component';
+import { createHelpinhoComponent } from './createhelpinho/create-helpinho.component';
 
 
 NgModule({
@@ -20,6 +20,6 @@ export const routes: Routes = [
     {path: 'register', component: RegisterComponent},
     {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
     {path: 'helpinho', component: HelpinhoComponent, canActivate: [AuthGuard]},
-    {path: 'criar', component: CreateHelpinhoComponent, canActivate: [AuthGuard]}
+    {path: 'criar/:id', component: createHelpinhoComponent, canActivate: [AuthGuard]}
 
 ];

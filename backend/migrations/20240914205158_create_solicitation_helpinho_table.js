@@ -8,8 +8,8 @@ exports.up = function(knex) {
         table.integer('solicitante_id').unsigned().references('id').inTable('users');
         table.string('descricao').notNullable();
         table.string('titulo').notNullable();
-        table.string('meta').notNullable();
-        table.text('imagem').notNullable();
+        table.decimal('meta', 14, 2).notNullable();
+        table.text('imagem').nullable();
     });
 };
 

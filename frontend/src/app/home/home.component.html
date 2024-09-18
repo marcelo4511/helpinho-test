@@ -23,29 +23,19 @@
                 <div class="w-full md:w-auto overflow-hidden flex justify-between p-2" >
         
                     <div class="flex justify-between ml-2">
-                        <div class="p-0 ">
-                            
-                            <button class="bg-gray-500 text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                                </svg>
-                            </button>
-                            
-                        </div>
+                        <figcaption class="flex items-center justify-center ">
+                            <img class="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png" alt="profile picture">
+                            <div class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3">
+                                <div>{{user[0]?.nome}}</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400">{{user[0]?.email}}</div>
+                            </div>
+                        </figcaption>
                         
-                        <div class="ml-2">
-                            <p>teste</p>
-                            <p class="text-gray-500">teste</p>
-                        </div>
-                        
-                        
-                        <button   class="bg-pink-500 text-white w-12 h-12 rounded-lg flex items-center justify-center hover:bg-pink-600 ml-3">
+                        <button  (click)="logout()" class="bg-pink-500 text-white w-12 h-12 p-2 rounded-lg flex items-center justify-center hover:bg-pink-600 ml-3">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-                            </svg>
-                            
+                            </svg>    
                         </button>
-                        
                     </div>
                     
                 </div>
@@ -109,7 +99,7 @@
     </div>
     
     <div class="grid grid-cols-2 gap-2 m-4" id="pesquisa">
-
+        
         <form>   
             <label for="default-search" class="mt-4 mb-3 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
             <div class="relative">
@@ -118,51 +108,73 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                     </svg>
                 </div>
-                <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="quem vamos ajudar hoje ?" required />
+                <input type="search" [formControl]="searchControl" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="quem vamos ajudar hoje ?" required />
             </div>
         </form>
     
-        <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <select
+            [(ngModel)]="selectedCategory" (change)="filterHelpinhos()" 
+            id="countries" 
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
             <option selected>Escolha uma categoria</option>
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="FR">France</option>
-            <option value="DE">Germany</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
         </select>
     </div>
 
-    <div id="helpinho"  *ngIf="helpinhos.length > 0" class="grid grid-cols-3 gap-3 ">
-
-    <div  *ngFor="let helpinho of helpinhos" class=" max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-5 m-4">
-        <a routerLink="/register">
-            <img src="assets/header.svg" alt="Example Image" height="599"/>
-        </a>
-        <div class="p-5">
-            <div class="mx-auto bg-white overflow-hidden flex justify-between mt-5 mb-5">
-                <div class="flex justify-between ml-2">
-                    <div class="p-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 object-cover rounded-full" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                        </svg>
+    <div id="helpinho">
+        <div *ngIf="helpinhosFiltrados.length > 0" class="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-3 gap-3 p-6">
+            <div *ngFor="let helpinho of helpinhosFiltrados" class=" max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-5 m-4">
+                <a routerLink="/register">
+                    <img src="assets/header.svg" alt="Example Image" height="599"/>
+                </a>
+                <figcaption class="flex items-center justify-center ">
+                    <img class="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png" alt="profile picture">
+                    <div class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3">
+                        <div>{{helpinho.nome}}</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">{{helpinho.email}}</div>
                     </div>
-                    <div class="ml-2">
-                        <p class=" font-bold">{{ helpinho.name }}</p>
-                        <p class="text-gray-500">{{ helpinho.email}}</p>
+                </figcaption>
+                <div class="p-5">
+                    <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+                        <div class="max-w-sm w-full bg-white shadow-lg rounded-lg overflow-hidden">
+                            <div class="px-6 py-4">
+                                <div class="font-bold text-xl mb-2 text-gray-900">{{ helpinho.titulo}}</div>
+                                <p class="text-gray-700 text-base">
+                                    {{helpinho.descricao}}.                                
+                                </p>
+                            </div>
+                            <div class="px-6 pt-4 pb-2">
+                                <span class="inline-block bg-blue-200 text-blue-800 text-sm font-semibold mr-2 mb-2 px-2.5 py-0.5 rounded-full">Category</span>
+                            </div>
+                        </div>
+                    </body>
+                      
+                    <!-- <div class="mx-auto bg-white overflow-hidden flex justify-between mt-5 mb-5">
+                        <div class="flex justify-between ml-2">
+                            <div class="p-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 object-cover rounded-full" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                </svg>
+                            </div>
+                            <div class="ml-2">
+                                <p class=" font-bold">{{ helpinho.nome }}</p>
+                                <p class="text-gray-500">{{ helpinho.email}}</p>
+                            </div>
+                        </div>
                     </div>
+                    <a>
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ helpinho.titulo}}</h5>
+                    </a>
+                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{helpinho.descricao}}.</p> -->
                 </div>
-                <button type="button" class="py-2 px-4 bg-pink-500 text-white rounded">
-                    contribuir
-                 </button>
+                <button type="button" class="py-2 px-4 bg-gray-100 text-pink-600 rounded rounded-lg m-5" [routerLink]="['/criar/', helpinho.id]" >
+                    Contribuir
+                </button>
             </div>
-            <a>
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ helpinho.titulo}}</h5>
-            </a>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{helpinho.descricao}}.</p>
         </div>
+        <div class="m-4" *ngIf="helpinhosFiltrados.length == 0">Não há helpinhos disponíveis no momento</div>
     </div>
-    </div>
-
-  
 
     <footer class="bg-white rounded-lg shadow m-4 dark:bg-gray-800 mt-5">
         <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
