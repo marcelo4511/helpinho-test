@@ -1,171 +1,266 @@
 <div class="p-0">
-    <nav class="bg-pink-200 p-6" style="height: 400px;">
-        <div class=" flex-wrap flex items-start justify-between">
+  <nav class="bg-pink-200 p-6" style="height: 400px">
+    <div class="flex-wrap flex items-start justify-between">
+      <div class="flex items-start flex-shrink-0 text-white mr-6">
+        <img src="assets/helpinho.png" alt="Example Image" width="200" />
+      </div>
 
-        
-        
-            <div class="flex items-start flex-shrink-0 text-white mr-6">
-                <img src="assets/helpinho.png" alt="Example Image"  width="200" />
-            </div>
-        
-            <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-                <div class="text-sm lg:flex-grow">
-                    <a class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800 mr-4">
-                    Helpinho
-                    </a>
-                    <a class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800 mr-4">
-                    Pesquisa
-                    </a>
-                    <a class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800">
-                    Sobre
-                    </a>
-                </div>
-                <div class="w-full md:w-auto overflow-hidden flex justify-between p-2" >
-        
-                    <div class="flex justify-between ml-2">
-                        <figcaption class="flex items-center justify-center ">
-                            <img class="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png" alt="profile picture">
-                            <div class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3">
-                                <div>{{user[0]?.nome}}</div>
-                                <div class="text-sm text-gray-500 dark:text-gray-400">{{user[0]?.email}}</div>
-                            </div>
-                        </figcaption>
-                        
-                        <button  (click)="logout()" class="bg-pink-500 text-white w-12 h-12 p-2 rounded-lg flex items-center justify-center hover:bg-pink-600 ml-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-                            </svg>    
-                        </button>
-                    </div>
-                    
-                </div>
-            </div>
+      <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+        <div class="text-sm lg:flex-grow">
+          <a
+            class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800 mr-4"
+          >
+            Helpinho
+          </a>
+          <a
+            class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800 mr-4"
+          >
+            Pesquisa
+          </a>
+          <a
+            class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800"
+          >
+            Sobre
+          </a>
         </div>
+        <div class="w-full md:w-auto overflow-hidden flex justify-between p-2">
+          <div class="flex justify-between ml-2">
+            <figcaption class="flex items-center justify-center">
+              <img
+                class="rounded-full w-9 h-9"
+                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
+                alt="profile picture"
+              />
+              <div
+                class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3"
+              >
+                <div>{{ user[0]?.nome }}</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                  {{ user[0]?.email }}
+                </div>
+              </div>
+            </figcaption>
 
-        <div class=" flex justify-between">
-            
-            <div class="mt-5 align-items: center h-screen ">
-                <img src="assets/passos.png" alt="Imagem" style="height: 100px;">
-
-                <div class="hidden lg:block">
-                    <h1 class="xl text-4xl text-gray-700">Faça a diferencia com um helpinho</h1>
-                    <p class="text-gray-700 mt-4 mb-4">Os helpinhos podem parecer pequenos, mas juntos fazem a <b class="text-pink-600">diferença na vida de todos</b></p>
-                </div>
-                    <a routerLink="/helpinho" class=" mt-4 inline-block text-sm px-4 py-2 bg-pink-600 border rounded rounded-lg text-slate-100 border-white mt-4 lg:mt-0 mr-2">Criar Seu Helpinho</a>
-            </div>
+            <button
+              (click)="logout()"
+              class="bg-pink-500 text-white w-12 h-12 p-2 rounded-lg flex items-center justify-center hover:bg-pink-600 ml-3"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="{1.5}"
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
-    </nav>
-    <div class="bg-white overflow-hidden p-5 mt-5 mb-5">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div class="flex items-center">
-                <div class="p-2">
-                    <h1 class="text-pink-800 text-4xl font-bold">1.</h1>
-                </div>
-                <div class="ml-2">
-                    <p class="text-red-600 font-bold">Escolha</p>
-                    <p class="text-gray-500">Escolha um helpinho que deseja ajudar</p>
-                </div>
-            </div>
-    
-            <div class="flex items-center">
-                <div class="p-2">
-                    <h1 class="text-pink-800 text-4xl font-bold">2.</h1>
-                </div>
-                <div class="ml-2">
-                    <p class="text-red-600 font-bold">Doe</p>
-                    <p class="text-gray-500">O valor é você que decide, e ele vai todo para quem escolher</p>
-                </div>
-            </div>
-    
-            <div class="flex items-center">
-                <div class="p-2">
-                    <h1 class="text-pink-800 text-4xl font-bold">3.</h1>
-                </div>
-                <div class="ml-2">
-                    <p class="text-red-600 font-bold">Aproveite</p>
-                    <p class="text-gray-500">Doar gera felicidade para você e para quem recebeu</p>
-                </div>
-            </div>
-    
-            <div class="flex items-center">
-                <div class="p-2">
-                    <h1 class="text-pink-800 text-4xl font-bold">4.</h1>
-                </div>
-                <div class="ml-2">
-                    <p class="text-red-600 font-bold">Acompanhe</p>
-                    <p class="text-gray-500">Fique ligado, Acompanhe se o helpinho alcançou o objetivo</p>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-    
-    <div class="grid grid-cols-2 gap-2 m-4" id="pesquisa">
-        
-        <form>   
-            <label for="default-search" class="mt-4 mb-3 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-            <div class="relative">
-                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400 bg-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                    </svg>
-                </div>
-                <input type="search" name="serch" [(ngModel)]="searchControl" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="quem vamos ajudar hoje ?" required />
-            </div>
-        </form>
-    
-        <select
-            [(ngModel)]="selectedCategory" 
-            id="countries" 
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+
+    <div class="flex justify-between">
+      <div class="mt-5 align-items: center h-screen">
+        <img src="assets/passos.png" alt="Imagem" style="height: 100px" />
+
+        <div class="hidden lg:block">
+          <h1 class="xl text-4xl text-gray-700">
+            Faça a diferença com um helpinho
+          </h1>
+          <p class="text-gray-700 mt-4 mb-4">
+            Os helpinhos podem parecer pequenos, mas juntos fazem a
+            <b class="text-pink-600">diferença na vida de todos</b>
+          </p>
+        </div>
+        <a
+          routerLink="/helpinho"
+          class="mt-4 inline-block text-sm px-4 py-2 bg-pink-600 border rounded rounded-lg text-slate-100 border-white mt-4 lg:mt-0 mr-2"
+          >Criar Seu Helpinho</a
         >
-            <option selected>Escolha uma categoria</option>
-            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-        </select>
+      </div>
     </div>
+  </nav>
+  <div class="bg-white overflow-hidden p-5 mt-5 mb-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="flex items-center">
+        <div class="p-2">
+          <h1 class="text-pink-800 text-4xl font-bold">1.</h1>
+        </div>
+        <div class="ml-2">
+          <p class="text-red-600 font-bold">Escolha</p>
+          <p class="text-gray-500">Escolha um helpinho que deseja ajudar</p>
+        </div>
+      </div>
 
-    <div id="helpinho">
-        <div *ngIf="helpinhos.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 p-6">
-            <div *ngFor="let helpinho of filteredItems()" class=" max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-5 m-4">
-                <a>
-                    <img src="assets/card.png" class="rounded rounded-lg" alt="Example Image" height="auto" width="100%"/>
+      <div class="flex items-center">
+        <div class="p-2">
+          <h1 class="text-pink-800 text-4xl font-bold">2.</h1>
+        </div>
+        <div class="ml-2">
+          <p class="text-red-600 font-bold">Doe</p>
+          <p class="text-gray-500">
+            O valor é você que decide, e ele vai todo para quem escolher
+          </p>
+        </div>
+      </div>
 
-                </a>
-                <figcaption class="flex items-start justify-start m-4">
-                    <img class="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png" alt="profile picture">
-                    <div class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3">
-                        <div class="break-words">{{helpinho.nome}}</div>
-                        <div class="text-sm text-gray-500 dark:text-gray-400 break-words">{{helpinho.email}}</div>
-                    </div>
-                </figcaption>
-                <div class="">
-                    <body class="">
-                        <div class="px-6 py-4">
-                            <div class="font-bold text-xl mb-2 text-gray-900">{{ helpinho.titulo}}</div>
-                            <p class="text-gray-700 text-base">
-                                {{helpinho.descricao}}.                                
-                            </p>
-                        </div>
-                        <div class="px-6 pt-3">
-                            <span class="inline-block bg-blue-200 text-blue-800 text-sm font-semibold mr-2 mb-2 px-2.5 py-0.5 rounded-full">{{helpinho.categoria}}</span>
-                        </div>
-                    </body>
-                    
-                </div>
-                <button type="button" class="py-2 px-4 border border-pink-500 bg-gray-100 text-pink-600 rounded rounded-lg m-5" [routerLink]="['/criar/', helpinho.id]" >
-                    Contribuir
-                </button>
+      <div class="flex items-center">
+        <div class="p-2">
+          <h1 class="text-pink-800 text-4xl font-bold">3.</h1>
+        </div>
+        <div class="ml-2">
+          <p class="text-red-600 font-bold">Aproveite</p>
+          <p class="text-gray-500">
+            Doar gera felicidade para você e para quem recebeu
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center">
+        <div class="p-2">
+          <h1 class="text-pink-800 text-4xl font-bold">4.</h1>
+        </div>
+        <div class="ml-2">
+          <p class="text-red-600 font-bold">Acompanhe</p>
+          <p class="text-gray-500">
+            Fique ligado, Acompanhe se o helpinho alcançou o objetivo
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-2 m-4" id="pesquisa">
+    <form>
+      <label
+        for="default-search"
+        class="mt-4 mb-3 text-sm font-medium text-gray-900 sr-only dark:text-white"
+        >Search</label
+      >
+      <div class="relative">
+        <div
+          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+        >
+          <svg
+            class="w-4 h-4 text-gray-500 dark:text-gray-400 bg-gray-500"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
+          </svg>
+        </div>
+        <input
+          type="search"
+          name="serch"
+          [(ngModel)]="searchControl"
+          id="default-search"
+          class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="quem vamos ajudar hoje ?"
+          required
+        />
+      </div>
+    </form>
+
+    <select
+      [(ngModel)]="selectedCategory"
+      id="countries"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    >
+      <option selected>Escolha uma categoria</option>
+      <option *ngFor="let category of categories" [value]="category">
+        {{ category }}
+      </option>
+    </select>
+  </div>
+
+  <div id="helpinho">
+    <div
+      *ngIf="helpinhos.length > 0"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 p-6"
+    >
+      <div
+        *ngFor="let helpinho of filteredItems()"
+        class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-5 m-4"
+      >
+        <a>
+          <img
+            src="assets/card.png"
+            class="rounded rounded-lg"
+            alt="Example Image"
+            height="auto"
+            width="100%"
+          />
+        </a>
+        <figcaption class="flex items-start justify-start m-4">
+          <img
+            class="rounded-full w-9 h-9"
+            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png"
+            alt="profile picture"
+          />
+          <div
+            class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3"
+          >
+            <div class="break-words">{{ helpinho.nome }}</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400 break-words">
+              {{ helpinho.email }}
             </div>
+          </div>
+        </figcaption>
+        <div class="">
+          <body class="">
+            <div class="px-6 py-4">
+              <div class="font-bold text-xl mb-2 text-gray-900">
+                {{ helpinho.titulo }}
+              </div>
+              <p class="text-gray-700 text-base">{{ helpinho.descricao }}.</p>
+            </div>
+            <div class="px-6 pt-3">
+              <span
+                class="inline-block bg-blue-200 text-blue-800 text-sm font-semibold mr-2 mb-2 px-2.5 py-0.5 rounded-full"
+                >{{ helpinho.categoria }}</span
+              >
+            </div>
+          </body>
         </div>
-        <div class="m-4" *ngIf="helpinhos.length == 0">Não há helpinhos disponíveis no momento</div>
+        <button
+          type="button"
+          class="py-2 px-4 border border-pink-500 bg-gray-100 text-pink-600 rounded rounded-lg m-5"
+          [routerLink]="['/criar/', helpinho.id]"
+        >
+          Contribuir
+        </button>
+      </div>
     </div>
+    <div class="m-4" *ngIf="helpinhos.length == 0">
+      Não há helpinhos disponíveis no momento
+    </div>
+  </div>
 
-    <footer class="bg-white rounded-lg shadow m-4 dark:bg-gray-800 mt-5">
-        <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-            <img src="assets/helpinho.png" alt="Example Image"  width="200" />
+  <footer class="bg-white rounded-lg shadow m-4 dark:bg-gray-800 mt-5">
+    <div
+      class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between"
+    >
+      <img src="assets/helpinho.png" alt="Example Image" width="200" />
 
-            <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2077 <a href="https://flowbite.com/" class="hover:underline">Helpinho</a>. Todos os direitos reservados.
-            </span>
-        </div>
-    </footer>
-
+      <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400"
+        >© 2077
+        <a href="https://flowbite.com/" class="hover:underline">Helpinho</a>.
+        Todos os direitos reservados.
+      </span>
+    </div>
+  </footer>
 </div>
