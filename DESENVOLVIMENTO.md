@@ -36,6 +36,8 @@ Esperamos as funcionalidades:
 
 - **Serverless** utilizando **AWS** -> infelizmnte não foi possível, foi feito com SERVERLESS OFFLINE e MYSQL
 
+  OBS: Tem até duas branchs, uma Mysql e outra dynamodb, mas sem sucesso, optei pelo que tenho mais facilidade
+
   Configurei migrations com a bibioteca knex
 
   Para rodar as migrations é o comando = npx knex migrate:latest
