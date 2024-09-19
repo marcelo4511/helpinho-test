@@ -69,19 +69,3 @@ module.exports.createSolicitationHelpinho = async (event) => {
         }
     }
 };
-
-// Buscar um usuário pelo ID
-module.exports.getUserById = async (userId) => {
-  const connection = await getConnection();
-  try {
-        const [rows] = await connection.execute('SELECT * FROM users WHERE id = ?', [userId]);
-        await connection.end();
-        if (rows.length === 0) {
-        throw new Error('User not found');
-        }
-        return rows[0];
-    } catch (error) {
-        await connection.end();
-        throw new Error('Error fetching user');
-    }
-};
