@@ -15,7 +15,7 @@ export class LoginComponent {
   form: FormGroup;
   errorMessage: string = '';
   submitted = false;
-  passwordFieldType: string = 'password'; // Inicialmente como senha
+  passwordFieldType: string = 'password';
 
   constructor(
     private authService: AuthService,

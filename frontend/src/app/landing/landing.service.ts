@@ -10,18 +10,24 @@ import { environment } from '../createhelpinho/environments';
 export class LandingService {
     private apiUrl = environment.apiUrl
 
-    constructor(private http: HttpClient,    private authService: AuthService,
+    constructor(private http: HttpClient, private authService: AuthService,
     ) { }
 
-    getHelpinhos(): Observable<any> {
+    getHelpinhosoffline(): Observable<any> {
         return this.http.get(`${this.apiUrl}/helpinhos/offline`, {  });
+    }
+
+    getHelpinhos(): Observable<any> {
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        return this.http.get(`${this.apiUrl}/helpinhos`, { headers });
     }
 
     getuser(): Observable<any> {
         const headers = new HttpHeaders({
             'Authorization': `Bearer ${this.authService.getToken()}`
         });
-
         return this.http.get(`${this.apiUrl}/user/loggeduser`, { headers });
     }
 }

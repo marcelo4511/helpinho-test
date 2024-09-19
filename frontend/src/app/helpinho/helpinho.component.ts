@@ -144,7 +144,10 @@ export class HelpinhoComponent {
                 this.user = data.users;
             },
             (error) => {
-                console.error('Erro ao buscar helpinhos:', error);
+                if(error.status == 401) {
+                    this.authService.logout()
+                }
+                console.error(error);
             }
         );
     }

@@ -99,12 +99,12 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                     </svg>
                 </div>
-                <input type="search" [formControl]="searchControl" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="quem vamos ajudar hoje ?" required />
+                <input type="search" name="serch" [(ngModel)]="searchControl" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="quem vamos ajudar hoje ?" required />
             </div>
         </form>
     
         <select
-            [(ngModel)]="selectedCategory" (change)="filterHelpinhos()" 
+            [(ngModel)]="selectedCategory"
             id="countries" 
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
@@ -114,8 +114,8 @@
     </div>
 
     <div id="helpinho">
-        <div *ngIf="helpinhosFiltrados.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 p-6">
-            <div *ngFor="let helpinho of helpinhosFiltrados" class=" max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-5 m-4">
+        <div *ngIf="helpinhos.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 p-6">
+            <div *ngFor="let helpinho of filteredItems()" class=" max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-5 m-4">
                 <a>
                     <img src="assets/card.png" class="rounded rounded-lg" alt="Example Image" height="auto" width="100%"/>
 
@@ -146,7 +146,7 @@
                 </button>
             </div>
         </div>
-        <div class="m-4" *ngIf="helpinhosFiltrados.length == 0">Não há helpinhos disponíveis no momento</div>
+        <div class="m-4" *ngIf="helpinhos.length == 0">Não há helpinhos disponíveis no momento</div>
     </div>
 
     

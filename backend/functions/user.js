@@ -8,7 +8,7 @@ const Joi = require('joi');
 
 const app = express();
 app.use(express.json());
-// Criar um novo usuário
+
 module.exports.createUser = async (data) => {
     const connection = await getConnection();
     try {
@@ -21,22 +21,6 @@ module.exports.createUser = async (data) => {
     } catch (error) {
         await connection.end();
         throw new Error('Error creating user');
-    }
-};
-
-// Buscar um usuário pelo ID
-module.exports.getUserById = async (userId) => {
-  const connection = await getConnection();
-  try {
-        const [rows] = await connection.execute('SELECT * FROM users WHERE id = ?', [userId]);
-        await connection.end();
-        if (rows.length === 0) {
-        throw new Error('User not found');
-        }
-        return rows[0];
-    } catch (error) {
-        await connection.end();
-        throw new Error('Error fetching user');
     }
 };
 
@@ -151,7 +135,6 @@ module.exports.registerUser = async (data) => {
         // Gerar o token JWT
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     
-        // Fechar conexão
         await connection.end();
     
         return {

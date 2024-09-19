@@ -20,11 +20,10 @@ export class LandingComponent {
   password: string = '';
   errorMessage: string = '';
   helpinhos: any[] = []; 
-  searchControl = new FormControl('');
+  searchControl: string = '';
   selectedCategory: string = '';
   helpinhosFiltrados: any[] = [];
 
-  searchTerm: string = '';
   filteredHelpinhos: any[] = [];
   categories = ['Jogos', 'Saude', 'Música', 'Reforma', 'Emergencia', 'Hospitalar'];
   constructor(
@@ -38,21 +37,10 @@ export class LandingComponent {
   }
   
 
-  filtrarHelpinhos(searchTerm: string | null): void {
-    
-  }
-
   getHelpinhos() {
-    this.helpinhoService.getHelpinhos().subscribe(
+    this.helpinhoService.getHelpinhosoffline().subscribe(
       (data) => {
-          this.helpinhos = data.helpinhos;
-          this.searchControl.valueChanges.subscribe(searchTerm => {
-            this.helpinhosFiltrados = this.helpinhos.filter(
-              (helpinho) =>
-                (helpinho.descricao.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-                  helpinho.titulo.toLowerCase().includes(searchTerm?.toLowerCase()))
-            );
-          });        
+          this.helpinhos = data.helpinhos;     
         },
 
       (error) => {
@@ -61,15 +49,24 @@ export class LandingComponent {
     );
   }
 
-  filterHelpinhos() {
-    this.helpinhosFiltrados = this.helpinhos.filter(helpinho => {
-      const matchesCategory = this.selectedCategory ? helpinho.categoria === this.selectedCategory : true;
-      const matchesSearchTerm = this.searchTerm 
-        ? helpinho.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-          helpinho.description.toLowerCase().includes(this.searchTerm.toLowerCase())
-        : true;
-      
-      return matchesCategory && matchesSearchTerm;
-    });
+  filteredItems() {
+    let filtered = this.helpinhos;
+
+    // Filtro por título ou descrição
+    if (this.searchControl) {
+      const lowerCaseSearchTerm = this.searchControl.toLowerCase();
+      filtered = filtered.filter(item =>
+        item.titulo.toLowerCase().includes(lowerCaseSearchTerm) ||
+        item.descricao.toLowerCase().includes(lowerCaseSearchTerm)
+      );
+    }
+
+    // Filtro por categoria
+    if (this.selectedCategory) {
+        filtered = filtered.filter(item => item.categoria === this.selectedCategory);
+    }
+    
+    return filtered;
+    ;
   }
 }  

@@ -25,9 +25,8 @@ export class HomeComponent {
   helpinhos: any[] = [];
   helpinhosFiltrados: any[] = [];
   user: any[] = [];
-  searchControl = new FormControl('');
+  searchControl: string = '';
   selectedCategory: string = '';
-  searchTerm: string = '';
   filteredHelpinhos: any[] = [];
   categories = [
     'Jogos',
@@ -69,49 +68,38 @@ export class HomeComponent {
     );
   }
 
-  filtrarHelpinhos(searchTerm: string | null): void {
-    this.helpinhosFiltrados = this.helpinhos.filter(
-      (helpinho) =>
-        (helpinho.descricao.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-          helpinho.titulo.toLowerCase().includes(searchTerm?.toLowerCase())) &&
-        helpinho.solicitante_id !== this.user[0].id
-    );
+  filteredItems() {
+    let filtered = this.helpinhos;
+
+    // Filtro por título ou descrição
+    if (this.searchControl) {
+      const lowerCaseSearchTerm = this.searchControl.toLowerCase();
+      filtered = filtered.filter(item =>
+        item.titulo.toLowerCase().includes(lowerCaseSearchTerm) ||
+        item.descricao.toLowerCase().includes(lowerCaseSearchTerm)
+      );
+    }
+
+    // Filtro por categoria
+    if (this.selectedCategory) {
+        filtered = filtered.filter(item => item.categoria === this.selectedCategory);
+    }
+
+    return filtered;
+    ;
   }
 
   getHelpinhos() {
     this.helpinhoService.getHelpinhos().subscribe(
       (data) => {
         this.helpinhos = data.helpinhos;
-        this.helpinhosFiltrados = this.helpinhos.filter(
-          (helpinho) => helpinho.solicitante_id != this.user[0].id
-        );
-        this.searchControl.valueChanges.subscribe((searchTerm) => {
-          this.filtrarHelpinhos(searchTerm);
-        });
-        console.log(this.user[0].id);
       },
-
       (error) => {
-        console.error('Erro ao buscar helpinhos:', error);
+        if(error.status == 401) {
+          this.authService.logout()
+        }
+        console.error( error);
       }
     );
-  }
-
-  filterHelpinhos() {
-    this.helpinhosFiltrados = this.helpinhos.filter((helpinho) => {
-      const matchesCategory = this.selectedCategory
-        ? helpinho.categoria === this.selectedCategory
-        : true;
-      const matchesSearchTerm = this.searchTerm
-        ? helpinho.title
-            .toLowerCase()
-            .includes(this.searchTerm.toLowerCase()) ||
-          helpinho.description
-            .toLowerCase()
-            .includes(this.searchTerm.toLowerCase())
-        : true;
-
-      return matchesCategory && matchesSearchTerm;
-    });
   }
 }

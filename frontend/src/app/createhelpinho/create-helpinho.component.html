@@ -37,7 +37,7 @@
                     <div class=" mt-2 text-gray-900"> Meta: <span class="font-bold">{{solicitation_helpinho.meta  | currency:'BRL':'symbol':'1.2-2':'pt-BR'}}</span></div>
 
                     <div class=" mt-2 text-gray-900">Solicitante: <span class="font-bold">{{solicitation_helpinho.nome}}</span></div>
-                    <div class="font-bold mt-5 text-gray-900">Total arrecadado: 5000</div>
+                    <div class="font-bold mt-5 text-gray-900">Total arrecadado: {{solicitation_helpinho.total | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
                 </div>
                 <div class="px-6 pt-4 pb-2">
                     <span class="inline-block bg-blue-200 text-blue-800 text-sm font-semibold mr-2 mb-2 px-2.5 py-0.5 rounded-full">{{solicitation_helpinho.categoria}}</span>
@@ -75,35 +75,4 @@
         </div>
     </form>
 
-    <!-- <div class="flex mb-6">
-
-        <div class="text-sm lg:flex-grow">
-            <a href="#helpinho" class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800 mr-4">
-            Helpinho
-            </a>
-            <a href="#pesquisa" class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800 mr-4">
-            Pesquisa
-            </a>
-            <a href="#" class="block mt-4 lg:inline-block lg:mt-0 text-gray-500 hover:text-pink-800">
-            Sobre
-            </a>
-        </div>
-        
-        <div class=" space-y-4">
-            <div class="mt-1 p-2 border border-pink-300 rounded bg-pink-100" style="height: 400px;" [innerHTML]="previewContent">
-
-            </div>
-
-            <div class="flex justify-end">
-                <button 
-                    (click)="prevStep()" 
-                    type="button"
-                    class="bg-white text-black border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 mr-1">Voltar
-                </button>
-                
-                <button type="submit" class="py-2 px-4 bg-pink-500 text-white rounded">
-                Validar
-                </button>
-            </div>
-        </div> -->
-    
+  
