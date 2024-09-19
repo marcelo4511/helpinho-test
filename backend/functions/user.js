@@ -8,7 +8,7 @@ const Joi = require('joi');
 
 const app = express();
 app.use(express.json());
-// Criar um novo usuário
+
 module.exports.createUser = async (data) => {
     const connection = await getConnection();
     try {
@@ -21,22 +21,6 @@ module.exports.createUser = async (data) => {
     } catch (error) {
         await connection.end();
         throw new Error('Error creating user');
-    }
-};
-
-// Buscar um usuário pelo ID
-module.exports.getUserById = async (userId) => {
-  const connection = await getConnection();
-  try {
-        const [rows] = await connection.execute('SELECT * FROM users WHERE id = ?', [userId]);
-        await connection.end();
-        if (rows.length === 0) {
-        throw new Error('User not found');
-        }
-        return rows[0];
-    } catch (error) {
-        await connection.end();
-        throw new Error('Error fetching user');
     }
 };
 
@@ -55,7 +39,7 @@ module.exports.registerUser = async (data) => {
     if (password !== confirm_password) {
         return {
             statusCode: 400,
-            body: JSON.stringify({ message: 'as senhas não coincidem' }),
+            body: JSON.stringify('as senhas não coincidem'),
         };
     }
     const connection = await mysql.createConnection({
@@ -72,7 +56,7 @@ module.exports.registerUser = async (data) => {
         if (existingUsers.length > 0) {
             return {
                 statusCode: 400,
-                body: JSON.stringify({ message: 'e-mail já está cadastrado' }),
+                body: JSON.stringify('e-mail já está cadastrado'),
             };
         }
 
@@ -115,7 +99,7 @@ module.exports.registerUser = async (data) => {
 
         if (error) {
             return {
-                statusCode: 400,
+                statusCode: 500,
                 body: JSON.stringify({ message: error.details[0].message }),
             };
         }
@@ -128,14 +112,12 @@ module.exports.registerUser = async (data) => {
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
         });
-        // Consultar usuário no banco de dados
         const [rows] = await connection.query('SELECT * FROM users WHERE email = ?', [email]);
     
-        // Verificar se o usuário foi encontrado
         if (rows.length === 0) {
             return {
-                statusCode: 400,
-                body: JSON.stringify({ message: 'Usuário não encontrado' })
+                statusCode: 500,
+                body: JSON.stringify( 'Usuário não encontrado' )
             };
         }
   
@@ -143,18 +125,16 @@ module.exports.registerUser = async (data) => {
     
         // Verificar a senha
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        console.log(isPasswordValid)
         if (!isPasswordValid) {
             return {
-                statusCode: 400,
-                body: JSON.stringify({ message: 'Senha incorreta' })
+                statusCode: 500,
+                body: JSON.stringify('Senha incorreta')
             };
         }
   
         // Gerar o token JWT
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     
-        // Fechar conexão
         await connection.end();
     
         return {
@@ -164,7 +144,7 @@ module.exports.registerUser = async (data) => {
         } catch (error) {
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Erro no servidor' })
+            body: JSON.stringify('Erro no servidor')
         };
     }
 };

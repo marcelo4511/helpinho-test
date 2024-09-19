@@ -1,29 +1,13 @@
 const userFunctions = require('./functions/user');
-const helpinhoFunctions = require('./functions/helpinho');
 const AWS = require('aws-sdk');
 const S3 = new AWS.S3();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2/promise');
 const express = require('express');
-const app = express();
 const multipart = require('lambda-multipart-parser');
+const Joi = require('joi');
 
-module.exports.getUser = async (event) => {
-    const userId = event.pathParameters.id;
-        try {
-            const user = await userFunctions.getUserById(userId);
-        return {
-            statusCode: 200,
-            body: JSON.stringify(user),
-        };
-        } catch (error) {
-        return {
-            statusCode: 404,
-            body: JSON.stringify({ error: error.message }),
-        };
-    }
-};
 
 module.exports.users = async (event) => {
     const userId = event.requestContext.authorizer.principalId;
@@ -48,19 +32,29 @@ module.exports.createSolicitationHelpinho = async (event) => {
         let connection;
         const decoded = verifyToken(event);
   
-        // Se o token for inválido, retorna a mensagem de erro
         if (decoded.statusCode) {
             return decoded;
         }
       
-        const formData = await multipart.parse(event);
-        upload.single(formData.files[0])
-        const descricao = formData.descricao || null;
-        const imagem = formData.files[0] ? formData.files[0].filename : null;
-        const titulo = formData.titulo || null;
-        const solicitante_id = decoded.sub;
-        const meta = formData.meta || null;
+        const data = JSON.parse(event.body);
+        const { descricao, titulo, solicitante_id, meta, categoria } = data;
+        const schema = Joi.object({
+            categoria: Joi.required().messages({
+                'any.required': 'categoria é obrigatório'
+            }),
+            meta: Joi.required().messages({
+                'any.required': 'meta é obrigatório'
+            }),       
+        });
 
+        const { error } = schema.validate({ categoria, meta });
+
+        if (error) {
+            return {
+                statusCode: 422,
+                body: JSON.stringify({ message: error.details[0].message }),
+            };
+        }
         connection = await mysql.createConnection({
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
@@ -68,8 +62,8 @@ module.exports.createSolicitationHelpinho = async (event) => {
             database: process.env.DB_NAME,
         });
         const [result] = await connection.execute(
-            'INSERT INTO solicitation_helpinho (descricao, titulo, solicitante_id, meta, imagem) VALUES (?, ?, ?,?,?)',
-            [descricao, titulo, solicitante_id, meta, imagem]
+            'INSERT INTO solicitation_helpinho (descricao, titulo, solicitante_id, meta, categoria) VALUES (?, ?, ?,?,?)',
+            [descricao, titulo, solicitante_id, meta, categoria]
         );
         return {
             statusCode: 200,
@@ -92,9 +86,9 @@ module.exports.createHelpinho = async (event) => {
         let connection;
         const decoded = verifyToken(event);
         const data = JSON.parse(event.body);
+
         const { valor, solicitacao_id, doador_id } = data;
 
-        // Se o token for inválido, retorna a mensagem de erro
         if (decoded.statusCode) {
             return decoded;
         }
@@ -157,9 +151,9 @@ module.exports.login = async (event) => {
                 body: JSON.stringify({ message: 'User logado com sucesso', token: result.body }),
             };
         }
-        if(result.statusCode == 400) {
+        if(result.statusCode == 500) {
             return {
-                statusCode: 400,
+                statusCode: 500,
                 body: JSON.stringify({ error: result.body }),
             };
         }
@@ -181,9 +175,9 @@ const verifyToken = (event) => {
     } catch (error) {
         return { statusCode: 401, body: JSON.stringify({ message: 'Token inválido' }) };
     }
-  };
+};
 
-  module.exports.getHelpinhos = async (event) => {
+module.exports.getHelpinhos = async (event) => {
     const decoded = verifyToken(event);
   
     if (decoded.statusCode) {
@@ -198,13 +192,13 @@ const verifyToken = (event) => {
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
         });    
-        // Consulta ao banco de dados para buscar os "helpinhos"
         const [rows] = await connection.query(`
-            SELECT solicitation_helpinho.id, solicitation_helpinho.titulo, solicitation_helpinho.descricao, users.email, users.nome
+            SELECT solicitation_helpinho.id, solicitation_helpinho.titulo, solicitation_helpinho.descricao, solicitation_helpinho.meta, solicitation_helpinho.categoria, users.email, users.nome
             FROM solicitation_helpinho
             JOIN users ON solicitation_helpinho.solicitante_id = users.id
-        `);    
-        // Fechar a conexão
+            
+            WHERE users.id != ?`, [decoded.userId]);   
+
         await connection.end();
   
         return {
@@ -212,14 +206,13 @@ const verifyToken = (event) => {
             body: JSON.stringify({ helpinhos: rows })
         };
     } catch (error) {
-        console.error('Erro ao buscar helpinhos:', error);
+        console.error(error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Erro ao buscar helpinhos' })
+            body: JSON.stringify({ message: error })
         };
     }
 };
-
 
 module.exports.getHelpinhosOffline = async (event) => {
     try {
@@ -232,7 +225,7 @@ module.exports.getHelpinhosOffline = async (event) => {
         });    
 
         const [rows] = await connection.query(`
-            SELECT solicitation_helpinho.id, solicitation_helpinho.titulo, solicitation_helpinho.descricao, users.email, users.nome
+            SELECT solicitation_helpinho.id, solicitation_helpinho.titulo,solicitation_helpinho.categoria, solicitation_helpinho.descricao, users.email, users.nome
             FROM solicitation_helpinho
             JOIN users ON solicitation_helpinho.solicitante_id = users.id
         `);
@@ -244,22 +237,13 @@ module.exports.getHelpinhosOffline = async (event) => {
             body: JSON.stringify({ helpinhos: rows })
         };
     } catch (error) {
-        console.error('Erro ao buscar helpinhos:', error);
+        console.error(error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Erro ao buscar helpinhos' })
+            body: JSON.stringify({ message: error })
         };
     }
 };
-
-function decodeJWT(token) {
-    try {
-        return jwt.verify(token, process.env.JWT_SECRET);
-    } catch (error) {
-        console.error('Token inválido', error);
-        return null;
-    }
-}
 
 module.exports.getloggeduser = async (event) => {
     const token = event.headers.Authorization && event.headers.Authorization.split(' ')[1]; // Extraindo o Bearer Token
@@ -293,17 +277,56 @@ module.exports.getloggeduser = async (event) => {
     }
 };
 
-module.exports.teste = async (event) => {
-    const token = event.headers.Authorization && event.headers.Authorization.split(' ')[1]; // Extraindo o Bearer Token
-
-    if (!token) {
+module.exports.getSolicitationHelpinho = async (event) => {
+    const id = event.pathParameters.id;
+    connection = await mysql.createConnection({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME
+    });  
+    const decoded = verifyToken(event);
+  
+        if (decoded.statusCode) {
+            return decoded;
+        }   
+    try {
+      const [rows] = await connection.query(
+        `SELECT solicitation_helpinho.id, solicitation_helpinho.titulo, solicitation_helpinho.descricao, solicitation_helpinho.meta, solicitation_helpinho.categoria, users.email, users.nome, SUM(helpinho.valor) as total
+            FROM solicitation_helpinho
+            JOIN users ON solicitation_helpinho.solicitante_id = users.id
+            LEFT JOIN helpinho ON solicitation_helpinho.id = helpinho.solicitacao_id
+            WHERE solicitation_helpinho.id = ?`, [id]);   
+        
+      
+      if (rows.length > 0) {
         return {
-            statusCode: 401,
-            body: JSON.stringify({ error: 'é necessário fornecer o JSON Web Token' })
+            statusCode: 200,
+            body: JSON.stringify(rows[0]),
+        };
+    } else {
+        return {
+            statusCode: 404,
+            body: JSON.stringify({ error: 'Helpinho não encontrado' }),
         };
     }
+    } catch (error) {
+        console.log(error)
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: error }),
+        };
+    }
+};
+
+module.exports.getDashboard = async (event) => {
+    const decoded = verifyToken(event);
+  
+    if (decoded.statusCode) {
+        return decoded;
+    }
+  
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);   
         let connection;
         connection = await mysql.createConnection({
             host: process.env.DB_HOST,
@@ -311,16 +334,31 @@ module.exports.teste = async (event) => {
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
         });    
-        const [rows] = await connection.query('SELECT * FROM users WHERE id = ?', [decoded.userId]);
-        return {
-            statusCode: 200,
-            body: JSON.stringify({ users: rows })
-        };
+         // Consultar quantas vezes o usuário aparece como doador_id e solicitante_id
+            const [rows] = await connection.execute(
+                `SELECT
+                    (SELECT COUNT(*) FROM helpinho WHERE doador_id = ?) AS doador_count,
+                    (SELECT COUNT(*) FROM helpinho WHERE solicitacao_id = ?) AS solicitante_count`,
+                [decoded.userId, decoded.userId]
+            );
+        
+            // Fechar a conexão com o banco de dados
+            await connection.end();
+        
+            const doadorCount = rows[0].doador_count;
+            const solicitanteCount = rows[0].solicitante_count;
+  
+            return {
+                statusCode: 200,
+                body: JSON.stringify({
+                    doador_count: doadorCount,
+                    solicitante_count: solicitanteCount
+                }),
+            };
     } catch (error) {
-        console.log(error)
         return {
-            statusCode: 401,
-            body: JSON.stringify({ error: 'Token inválido' })
+            statusCode: 500,
+            body: JSON.stringify({ message: error })
         };
     }
 };

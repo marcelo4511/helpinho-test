@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'login',
@@ -14,11 +15,13 @@ export class LoginComponent {
   form: FormGroup;
   errorMessage: string = '';
   submitted = false;
-  passwordFieldType: string = 'password'; // Inicialmente como senha
+  passwordFieldType: string = 'password';
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private toastr: ToastrService,
+
     private fb: FormBuilder) {
       this.form = this.fb.group({
         email: ['', [Validators.required, Validators.email]],
@@ -36,7 +39,13 @@ export class LoginComponent {
 
         this.authService.login(email, password).then(response => {
           if(response) {
-            this.router.navigate(['/home']);
+            if(response && response.status == 500) {
+              this.errorMessage = response.message
+            }
+            else {
+              this.toastr.success('Bem vindo ao sistema!');
+              this.router.navigate(['/home']);
+            }
           }
         })
       .catch(error => {

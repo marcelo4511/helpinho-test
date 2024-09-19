@@ -281,5 +281,220 @@
     "serviceProviderAwsCfStackUpdated": null,
     "serviceProviderAwsCfStackStatus": null,
     "serviceProviderAwsCfStackOutputs": null
+  },
+  "C:\\laragon\\helpinho-test\\backend": {
+    "versionSfCore": null,
+    "versionFramework": "4.3.3",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeServiceName": null,
+    "servicePath": "C:\\laragon\\helpinho-test\\backend",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "org": "marcelobs96",
+      "app": "backend",
+      "service": "mysql-serverless",
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs18.x",
+        "iamRoleStatements": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "s3:PutObject"
+            ],
+            "Resource": "arn:aws:s3:::develop/*"
+          }
+        ],
+        "environment": {
+          "DB_HOST": "127.0.0.1",
+          "DB_USER": "root",
+          "DB_PASSWORD": "<REDACTED>",
+          "DB_NAME": "helpinho",
+          "JWT_SECRET": "<REDACTED>"
+        }
+      },
+      "functions": {
+        "register": {
+          "handler": "handler.register",
+          "events": [
+            {
+              "http": {
+                "path": "user/register",
+                "method": "post"
+              }
+            }
+          ]
+        },
+        "login": {
+          "handler": "handler.login",
+          "events": [
+            {
+              "http": {
+                "path": "user/login",
+                "method": "post"
+              }
+            }
+          ]
+        },
+        "createUser": {
+          "handler": "handler.createUser",
+          "events": [
+            {
+              "http": {
+                "path": "user",
+                "method": "post"
+              }
+            }
+          ]
+        },
+        "getUser": {
+          "handler": "handler.getUser",
+          "events": [
+            {
+              "http": {
+                "path": "user/{id}",
+                "method": "get"
+              }
+            }
+          ]
+        },
+        "getloggeduser": {
+          "handler": "handler.getloggeduser",
+          "events": [
+            {
+              "http": {
+                "path": "user/loggeduser",
+                "method": "get"
+              }
+            }
+          ]
+        },
+        "getHelpinhos": {
+          "handler": "handler.getHelpinhos",
+          "events": [
+            {
+              "http": {
+                "path": "helpinhos/",
+                "method": "get"
+              }
+            }
+          ]
+        },
+        "getHelpinhosOffline": {
+          "handler": "handler.getHelpinhosOffline",
+          "events": [
+            {
+              "http": {
+                "path": "helpinhos/offline",
+                "method": "get"
+              }
+            }
+          ]
+        },
+        "createSolicitationHelpinho": {
+          "handler": "handler.createSolicitationHelpinho",
+          "events": [
+            {
+              "http": {
+                "path": "helpinho/solicitation/create",
+                "method": "post"
+              }
+            }
+          ]
+        },
+        "createHelpinho": {
+          "handler": "handler.createHelpinho",
+          "events": [
+            {
+              "http": {
+                "path": "helpinho/create",
+                "method": "post"
+              }
+            }
+          ]
+        }
+      },
+      "authorizer": {
+        "handler": "authorizer.handler",
+        "events": [
+          {
+            "http": {
+              "path": "users",
+              "method": "get",
+              "authorizer": {
+                "name": "authorizer",
+                "type": "token",
+                "identitySource": "method.request.header.Authorization"
+              }
+            }
+          }
+        ]
+      },
+      "protectedRoute": {
+        "handler": "handler.protectedRoute",
+        "events": [
+          {
+            "http": {
+              "path": "/protected",
+              "method": "get",
+              "authorizer": {
+                "name": "authenticateToken",
+                "resultTtlInSeconds": 0
+              }
+            }
+          }
+        ]
+      },
+      "plugins": [
+        "serverless-offline"
+      ],
+      "custom": {
+        "scripts": {
+          "hooks": {
+            "before:deploy:deploy": "npm run migrate"
+          }
+        }
+      }
+    },
+    "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\r\norg: marcelobs96\r\n# \"app\" enables Serverless Framework Dashboard features and sharing them with other Services.\r\napp: backend\r\nservice: mysql-serverless\r\n\r\nprovider:\r\n  name: aws\r\n  runtime: nodejs18.x\r\n  iamRoleStatements:\r\n    - Effect: Allow\r\n      Action:\r\n        - s3:PutObject\r\n      Resource: arn:aws:s3:::develop/*\r\n  environment:\r\n    DB_HOST: 127.0.0.1     # Substitua pelo host do seu banco de dados MySQL\r\n    DB_USER: root     # Substitua pelo nome de usuário do banco de dados MySQL\r\n    DB_PASSWORD: ''  # Substitua pela senha do banco de dados MySQL\r\n    DB_NAME: helpinho     # Substitua pelo nome do banco de dados MySQL\r\n    JWT_SECRET: ${env:JWT_SECRET}\r\n\r\nfunctions:\r\n \r\n  register:\r\n    handler: handler.register\r\n    events:\r\n      - http:\r\n          path: user/register\r\n          method: post\r\n\r\n  login:\r\n    handler: handler.login\r\n    events:\r\n      - http:\r\n          path: user/login\r\n          method: post\r\n  createUser:\r\n    handler: handler.createUser\r\n    events:\r\n      - http:\r\n          path: user\r\n          method: post\r\n  getUser:\r\n    handler: handler.getUser\r\n    events:\r\n      - http:\r\n          path: user/{id}\r\n          method: get\r\n\r\n  getloggeduser:\r\n    handler: handler.getloggeduser\r\n    events:\r\n      - http:\r\n          path: user/loggeduser\r\n          method: get\r\n\r\n  getHelpinhos:\r\n    handler: handler.getHelpinhos\r\n    events:\r\n      - http:\r\n          path: helpinhos/\r\n          method: get\r\n\r\n  getHelpinhosOffline:\r\n    handler: handler.getHelpinhosOffline\r\n    events:\r\n      - http:\r\n          path: helpinhos/offline\r\n          method: get\r\n  \r\n  createSolicitationHelpinho:\r\n    handler: handler.createSolicitationHelpinho\r\n    events:\r\n      - http:\r\n          path: helpinho/solicitation/create\r\n          method: post\r\n\r\n  createHelpinho:\r\n    handler: handler.createHelpinho\r\n    events:\r\n      - http:\r\n          path: helpinho/create\r\n          method: post\r\n\r\nauthorizer:\r\n    handler: authorizer.handler\r\n    events:\r\n      - http:\r\n          path: users\r\n          method: get\r\n          authorizer:\r\n            name: authorizer\r\n            type: token\r\n            identitySource: 'method.request.header.Authorization'\r\n\r\nprotectedRoute:\r\n    handler: handler.protectedRoute\r\n    events:\r\n      - http:\r\n          path: /protected\r\n          method: get\r\n          authorizer: \r\n            name: authenticateToken\r\n            resultTtlInSeconds: 0\r\n\r\n\r\nplugins:\r\n  - serverless-offline\r\n\r\ncustom:\r\n  scripts:\r\n    hooks:\r\n      'before:deploy:deploy': npm run migrate\r\n\r\n",
+    "command": [
+      "offline",
+      "start"
+    ],
+    "options": {},
+    "error": {
+      "message": "Cannot resolve '${env:JWT_SECRET}' variable at 'provider.environment.JWT_SECRET'. No value is available for this variable, and no default value was provided. Please check your variable definitions or provide a default value.",
+      "stack": "Error: Cannot resolve '${env:JWT_SECRET}' variable at 'provider.environment.JWT_SECRET'. No value is available for this variable, and no default value was provided. Please check your variable definitions or provide a default value.\n    at _ResolverManager.resolve (file:///C:/Users/Marcelo/.serverless/releases/4.3.3/package/dist/sf-core.js:655:54744)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async #handlePlaceholderNode (file:///C:/Users/Marcelo/.serverless/releases/4.3.3/package/dist/sf-core.js:655:53234)\n    at async file:///C:/Users/Marcelo/.serverless/releases/4.3.3/package/dist/sf-core.js:655:51233\n    at async processNodeAndHandleCompletion (file:///C:/Users/Marcelo/.serverless/releases/4.3.3/package/dist/sf-core.js:655:42013)",
+      "code": "MISSING_VARIABLE_RESULT"
+    },
+    "machineId": "49d804da96fe215fe85034fce4ebb522",
+    "stage": "dev",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "b6d6f3f4-4896-48f6-8ac1-251cc7dd3c7c",
+    "orgName": "marcelobs96",
+    "userId": "hW62zY05339XlByHKz",
+    "dashboard": {
+      "isEnabledForService": true,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": {
+        "providers": false,
+        "monitoring": false
+      },
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": "QfPPPWVQjlLJmP3HFY",
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "marcelobs96",
+    "subscription": null,
+    "userEmail": "marcelobs96@bol.com.br",
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
   }
 }

@@ -12,85 +12,94 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './home.component.html',
   standalone: true,
   providers: [LandingService],
-  imports: [FormsModule, ReactiveFormsModule, HttpClientModule, RouterModule, CommonModule ],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    RouterModule,
+    CommonModule,
+  ],
 })
-
 export class HomeComponent {
-    isOpen = false;
-    helpinhos: any[] = [];  // Array para armazenar os helpinhos
-    helpinhosFiltrados: any[] = [];
-    user: any[] = [];  
-    searchControl = new FormControl('');
-    selectedCategory: string = '';
-    categories: string[] = ['Categoria A', 'Categoria B', 'Categoria C'];
-    searchTerm: string = '';
-    filteredHelpinhos: any[] = [];
-    constructor(
-      private toastr: ToastrService,
-      private authService: AuthService,
-      private helpinhoService: LandingService,
-      
-    ) { }
-  
-    ngOnInit() {
-      this.getuser()  
+  isOpen = false;
+  helpinhos: any[] = [];
+  helpinhosFiltrados: any[] = [];
+  user: any[] = [];
+  searchControl: string = '';
+  selectedCategory: string = '';
+  filteredHelpinhos: any[] = [];
+  categories = [
+    'Jogos',
+    'Saude',
+    'Música',
+    'Reforma',
+    'Emergencia',
+    'Hospitalar',
+  ];
+
+  constructor(
+    private toastr: ToastrService,
+    private authService: AuthService,
+    private helpinhoService: LandingService
+  ) {}
+
+  ngOnInit() {
+    this.getuser();
+    setTimeout(() => {
       this.getHelpinhos();
-    }
+    }, 1000);
+  }
 
-    logout() {    
-      this.authService.logout()
-      this.toastr.success('Até breve');
+  logout() {
+    this.authService.logout();
+    this.toastr.success('Até breve');
+  }
 
-    }
-
-    getuser() {
-      this.helpinhoService.getuser().subscribe(
-          (data) => {
-              this.user = data.users;
-          },
-          (error) => {
-              console.error('Erro ao buscar helpinhos:', error);
-          } 
-      );
-    }
-
-    filtrarHelpinhosNaoCriadosPeloUsuario(): void {
-      console.log(this.helpinhos)
-      this.helpinhosFiltrados = this.helpinhos.filter(helpinho => helpinho.solicitante_id !== this.user[0].id);
-    }
-
-    filtrarHelpinhos(searchTerm: string | null): void {
-      this.helpinhosFiltrados = this.helpinhos.filter(helpinho =>
-        (helpinho.descricao.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-        helpinho.titulo.toLowerCase().includes(searchTerm?.toLowerCase())) &&
-        helpinho.solicitante_id !== this.user[0].id
-      );
-    }
-  
-    getHelpinhos() {
-      this.helpinhoService.getHelpinhos().subscribe(
-        (data) => {
-          this.helpinhos = data.helpinhos;
-          this.helpinhosFiltrados = this.helpinhos.filter(helpinho => helpinho.solicitante_id !== this.user[0].id);
-          this.searchControl.valueChanges.subscribe(searchTerm => {
-              this.filtrarHelpinhos(searchTerm);
-            });        
-          },
-        (error) => {
-          console.error('Erro ao buscar helpinhos:', error);
+  getuser() {
+    this.helpinhoService.getuser().subscribe(
+      (data) => {
+        this.user = data.users;
+      },
+      (error) => {
+        if(error.status == 401) {
+          this.authService.logout()
         }
+      }   
+    );
+  }
+
+  filteredItems() {
+    let filtered = this.helpinhos;
+
+    // Filtro por título ou descrição
+    if (this.searchControl) {
+      const lowerCaseSearchTerm = this.searchControl.toLowerCase();
+      filtered = filtered.filter(item =>
+        item.titulo.toLowerCase().includes(lowerCaseSearchTerm) ||
+        item.descricao.toLowerCase().includes(lowerCaseSearchTerm)
       );
     }
 
-    filterHelpinhos() {
-      this.filteredHelpinhos = this.helpinhos.filter(helpinho => {
-        const matchesCategory = this.selectedCategory ? helpinho.category === this.selectedCategory : true;
-        const matchesSearchTerm = this.searchTerm 
-          ? helpinho.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-            helpinho.description.toLowerCase().includes(this.searchTerm.toLowerCase())
-          : true;
-        
-        return matchesCategory && matchesSearchTerm;
-      });
+    // Filtro por categoria
+    if (this.selectedCategory) {
+        filtered = filtered.filter(item => item.categoria === this.selectedCategory);
     }
+
+    return filtered;
+    ;
+  }
+
+  getHelpinhos() {
+    this.helpinhoService.getHelpinhos().subscribe(
+      (data) => {
+        this.helpinhos = data.helpinhos;
+      },
+      (error) => {
+        if(error.status == 401) {
+          this.authService.logout()
+        }
+        console.error( error);
+      }
+    );
+  }
 }

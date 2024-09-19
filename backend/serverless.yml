@@ -13,14 +13,13 @@ provider:
         - s3:PutObject
       Resource: arn:aws:s3:::develop/*
   environment:
-    DB_HOST: 127.0.0.1     # Substitua pelo host do seu banco de dados MySQL
-    DB_USER: root     # Substitua pelo nome de usuário do banco de dados MySQL
-    DB_PASSWORD: ''  # Substitua pela senha do banco de dados MySQL
-    DB_NAME: helpinho     # Substitua pelo nome do banco de dados MySQL
+    DB_HOST: 127.0.0.1 # Substitua pelo host do seu banco de dados MySQL
+    DB_USER: root # Substitua pelo nome de usuário do banco de dados MySQL
+    DB_PASSWORD: "" # Substitua pela senha do banco de dados MySQL
+    DB_NAME: helpinho # Substitua pelo nome do banco de dados MySQL
     JWT_SECRET: ${env:JWT_SECRET}
 
 functions:
- 
   register:
     handler: handler.register
     events:
@@ -67,13 +66,20 @@ functions:
       - http:
           path: helpinhos/offline
           method: get
-  
+
   createSolicitationHelpinho:
     handler: handler.createSolicitationHelpinho
     events:
       - http:
           path: helpinho/solicitation/create
           method: post
+
+  getSolicitationHelpinho:
+    handler: handler.getSolicitationHelpinho
+    events:
+      - http:
+          path: helpinho/solicitation/{id}
+          method: get
 
   createHelpinho:
     handler: handler.createHelpinho
@@ -83,26 +89,25 @@ functions:
           method: post
 
 authorizer:
-    handler: authorizer.handler
-    events:
-      - http:
-          path: users
-          method: get
-          authorizer:
-            name: authorizer
-            type: token
-            identitySource: 'method.request.header.Authorization'
+  handler: authorizer.handler
+  events:
+    - http:
+        path: users
+        method: get
+        authorizer:
+          name: authorizer
+          type: token
+          identitySource: "method.request.header.Authorization"
 
 protectedRoute:
-    handler: handler.protectedRoute
-    events:
-      - http:
-          path: /protected
-          method: get
-          authorizer: 
-            name: authenticateToken
-            resultTtlInSeconds: 0
-
+  handler: handler.protectedRoute
+  events:
+    - http:
+        path: /protected
+        method: get
+        authorizer:
+          name: authenticateToken
+          resultTtlInSeconds: 0
 
 plugins:
   - serverless-offline
@@ -110,5 +115,4 @@ plugins:
 custom:
   scripts:
     hooks:
-      'before:deploy:deploy': npm run migrate
-
+      "before:deploy:deploy": npm run migrate
