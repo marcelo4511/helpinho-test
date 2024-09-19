@@ -206,10 +206,10 @@ module.exports.getHelpinhos = async (event) => {
             body: JSON.stringify({ helpinhos: rows })
         };
     } catch (error) {
-        console.error('Erro ao buscar helpinhos:', error);
+        console.error(error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Erro ao buscar helpinhos' })
+            body: JSON.stringify({ message: error })
         };
     }
 };
@@ -237,10 +237,10 @@ module.exports.getHelpinhosOffline = async (event) => {
             body: JSON.stringify({ helpinhos: rows })
         };
     } catch (error) {
-        console.error('Erro ao buscar helpinhos:', error);
+        console.error(error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Erro ao buscar helpinhos' })
+            body: JSON.stringify({ message: error })
         };
     }
 };
@@ -314,7 +314,7 @@ module.exports.getSolicitationHelpinho = async (event) => {
         console.log(error)
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Erro ao buscar o Helpinho' }),
+            body: JSON.stringify({ error: error }),
         };
     }
 };
@@ -356,10 +356,9 @@ module.exports.getDashboard = async (event) => {
                 }),
             };
     } catch (error) {
-        console.error('Erro ao buscar helpinhos:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Erro ao buscar helpinhos' })
+            body: JSON.stringify({ message: error })
         };
     }
 };

@@ -42,8 +42,10 @@ export class LoginComponent {
             if(response && response.status == 500) {
               this.errorMessage = response.message
             }
-            this.toastr.success('Bem vindo ao sistema!');
-            this.router.navigate(['/home']);
+            else {
+              this.toastr.success('Bem vindo ao sistema!');
+              this.router.navigate(['/home']);
+            }
           }
         })
       .catch(error => {

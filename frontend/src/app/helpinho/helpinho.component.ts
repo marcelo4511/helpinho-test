@@ -36,7 +36,7 @@ export class HelpinhoComponent {
     previewContent: string = '';
     user: any[] = [];  
     category: string = '';
-    meta: number = 0;
+    meta: any = 0;
     currency: string = ''
 
     constructor(private http: HttpClient, private authService: AuthService, private helpinhoService: LandingService, private router: Router, private toastr: ToastrService,
@@ -74,7 +74,6 @@ export class HelpinhoComponent {
         <div class="m-5 ">
             <h1 class="text-2xl font-bold mb-2">${this.form.value.titulo}</h1>
             <p class="text-gray-700">Descrição: ${this.form.value.descricao}</p>
-            <span class="inline-bslock bg-blue-200 text-blue-800 text-sm font-semibold mt-2 px-2.5 py-0.5 rounded-full">Meta: ${this.meta}</span><br>
             <span class="inline-block bg-blue-200 text-blue-800 text-sm font-semibold mt-2 px-2.5 py-0.5 rounded-full">Categoria: ${this.category}</span>
         </div>`;
     }
@@ -85,12 +84,9 @@ export class HelpinhoComponent {
     }
 
     selectValues(values: any) {
-        this.form.value.meta = values
         this.meta = values
+        this.form.value.meta = values
 
-        const string = values.toString()
-        const cleanedValue = string.replace(/[^0-9.,]/g, '').replace(',', '.');
-        this.currency = cleanedValue
     }
 
     async onSubmit(): Promise<void> {

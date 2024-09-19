@@ -36,6 +36,10 @@ Esperamos as funcionalidades:
 
 - **Serverless** utilizando **AWS** -> infelizmnte não foi possível, foi feito com SERVERLESS OFFLINE e MYSQL
 
+  Configurei migrations com a bibioteca knex
+
+  Para rodar as migrations é o comando = npx knex migrate:latest
+
 Esperamos as funcionalidades:
 
 1. **CRUD de Usuário**:

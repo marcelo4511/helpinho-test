@@ -198,7 +198,7 @@
             <p>Defina a meta que você quer alcançar seu helpinho.</p>
             <div class="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-4 p-6">
                 @for (valor of valores;track valor; let i = $index) {
-                    <div (click)="selectValues(valor)" [ngClass]="{'border-4 border-pink-500': meta === valor, 'border-2 border-gray-300':  meta !== valor}" class="max-w-sm mx-auto bg-white shadow-lg border border-pink-300 rounded-lg overflow-hidden flex-fill flex-initial">
+                    <div (click)="selectValues(valor)" [ngClass]="{'border-4 border-pink-500': meta == valor, 'border-2 border-gray-300':  meta != valor}" class="max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden flex-fill flex-initial">
                         <div class=" flex justify-start">
                             <div class="p-6 " style="width: 170px;" height="50px">
                                 @if(valor == 5000 || valor == 2000|| valor == 1000){
