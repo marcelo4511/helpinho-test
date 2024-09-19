@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { environment } from '../app/createhelpinho/environments';
 
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
+    private apiUrl = environment.apiUrl
     private currentUserToken: string | null = null;
-    private apiUrl = 'http://localhost:3000/dev/user/login';
 
     constructor(private router: Router) {
         if (this.isLocalStorageAvailable()) {
@@ -18,7 +19,7 @@ export class AuthService {
   
     login(email: string, password: string): Promise<any> {
            
-        return fetch(this.apiUrl, {
+        return fetch(`${this.apiUrl}/user/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,8 +31,10 @@ export class AuthService {
         })
         .then(async response => {
             if (!response.ok) {
-                throw new Error('Erro na autenticação');
+                const error = await response.json()
+                return {status: 500, message: error.error};
             }
+
             const data = await response.json();
             this.currentUserToken = data.token;
             if (this.isLocalStorageAvailable()) {
@@ -80,7 +83,7 @@ export class AuthService {
 
     // Método para obter o usuário logado
     async getLoggedUser(): Promise<void> {
-        fetch('http://localhost:3000/dev/user/loggeduser', {
+        fetch(`${this.apiUrl}/user/loggeduser`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -90,7 +93,6 @@ export class AuthService {
         .then(response => {
             return response.json()
         }).then(data => {
-            console.log(data)
             return data
         })
         .catch(error => console.error('Erro ao obter usuário logado:', error));

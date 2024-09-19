@@ -9,6 +9,8 @@ import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import localePtExtra from '@angular/common/locales/extra/pt';
 import { LOCALE_ID } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { environment } from "../createhelpinho/environments";
 
 registerLocaleData(localePt, 'pt-BR', localePtExtra);
 @Component({
@@ -21,27 +23,28 @@ registerLocaleData(localePt, 'pt-BR', localePtExtra);
 })
 export class HelpinhoComponent {
     public currentStep = 0;
-    
+    private apiUrl = environment.apiUrl
+
     public steps = ['Categoria do helpinho', 'Conhecendo o helpinho', 'Metas do helpinho', 'Revisando'];
     public valores = [5000, 1000, 2000, 100000, 200000];
     public categorias = ['Jogos', 'Saude', 'Música', 'Reforma', 'Emergencia', 'Hospitalar'];
 
     form: FormGroup;
     submitted = false;
-    
-    titulo: string = '';
-    descricao: string = '';
-    image: File | null = null;
+
     loggedUser: any;
     previewContent: string = '';
     user: any[] = [];  
+    category: string = '';
+    meta: number = 0;
+    currency: string = ''
 
-    constructor(private http: HttpClient, private authService: AuthService, private helpinhoService: LandingService,
+    constructor(private http: HttpClient, private authService: AuthService, private helpinhoService: LandingService, private router: Router, private toastr: ToastrService,
+
         private fb: FormBuilder) {
             this.form = this.fb.group({
                 titulo: ['', [Validators.required, Validators.minLength(3)]],
-                descricao: ['', [Validators.required, Validators.email]],
-                image: ['', [Validators.required]],
+                descricao: ['', [Validators.required, Validators.minLength(10)]],
             }) 
         } 
     
@@ -68,47 +71,63 @@ export class HelpinhoComponent {
 
     updatePreview(): void {
         this.previewContent = `
-         <h1 class="text-2xl font-bold mb-2">${this.form.value.titulo}</h1>
-            <p class="text-gray-700">Descrição${this.form.value.descricao}</p>
-            <span class="inline-block bg-blue-200 text-blue-800 text-sm font-semibold mt-2 px-2.5 py-0.5 rounded-full">Meta: ${this.form.value.meta}</span>
-            <span class="inline-block bg-blue-200 text-blue-800 text-sm font-semibold mt-2 px-2.5 py-0.5 rounded-full">Categoria: ${this.form.value.meta}</span>
-        `;
+        <div class="m-5 ">
+            <h1 class="text-2xl font-bold mb-2">${this.form.value.titulo}</h1>
+            <p class="text-gray-700">Descrição: ${this.form.value.descricao}</p>
+            <span class="inline-bslock bg-blue-200 text-blue-800 text-sm font-semibold mt-2 px-2.5 py-0.5 rounded-full">Meta: ${this.meta}</span><br>
+            <span class="inline-block bg-blue-200 text-blue-800 text-sm font-semibold mt-2 px-2.5 py-0.5 rounded-full">Categoria: ${this.category}</span>
+        </div>`;
+    }
+
+    selectCategory(category: any) {
+        this.category = category
+        this.form.value.categoria = category
+    }
+
+    selectValues(values: any) {
+        this.form.value.meta = values
+        this.meta = values
+
+        const string = values.toString()
+        const cleanedValue = string.replace(/[^0-9.,]/g, '').replace(',', '.');
+        this.currency = cleanedValue
     }
 
     async onSubmit(): Promise<void> {
         this.submitted = true;
-        // if (this.form.invalid) {
-        //     return;
-        // }
-        //if (this.form.valid) {
-
-        const headers = new HttpHeaders({
-            'Authorization': `Bearer ${this.authService.getToken()}`
-        });
+        if (this.form.invalid) {
+            return;
+        }
+        if (this.form.valid) {
+        
+            const headers = new HttpHeaders({
+                'Authorization': `Bearer ${this.authService.getToken()}`
+            });
             
-            const formData = new FormData();
-            formData.append('titulo', this.form.value.titulo);
-            formData.append('descricao', this.form.value.descricao);
-            formData.append('imagem', this.form.value.image);
-            formData.append('meta', this.form.value.descricao);
-            formData.append('solicitante', '1')
-            try {
-                this.http.post('http://localhost:3000/dev/helpinho/solicitation/create', formData, { headers }).subscribe(
-                    (data) => {
-                        console.log(data)
-                    },
-                )
-                // if (!response.ok) {
-                //     throw new Error('Network response was not ok ' + response.statusText);
-                // }
-          
-                //const result =  response.json();
-            } catch (error) {
-                console.error('Error:', error);
+            this.form.value.solicitante_id = this.user[0].id
+            this.form.value.categoria = this.category
+            this.form.value.meta = this.meta
+            if(this.form.value.meta == 0) {
+                this.toastr.error('Meta deve ser um valor diferente de R$ 0,00');
+                return
             }
-    
-            console.log('Formulário enviado:', formData);
-       // }
+            try {
+                this.http.post(`${this.apiUrl}/helpinho/solicitation/create`, this.form.value, { headers }).subscribe(
+                    (response) => {
+                        if(response) {
+                            this.toastr.success('Solicitação de helpinho feita com sucesso!');
+                            this.router.navigate(['/home']);
+                        }
+                    },
+                    (error) => {
+                        this.toastr.error(error.error.message);
+
+                    }
+                )
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
 
     logout() {    

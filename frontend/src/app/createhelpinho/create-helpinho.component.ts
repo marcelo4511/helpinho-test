@@ -7,6 +7,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { LandingService } from "../landing/landing.service";
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from "./environments";
 
 @Component({
     selector: 'app-create-helpinho',
@@ -16,6 +17,8 @@ import { ToastrService } from 'ngx-toastr';
     providers: [LandingService, provideNgxMask()]
 })
 export class createHelpinhoComponent {
+    private apiUrl = environment.apiUrl
+
     public currentStep = 0;
     public steps = ['Categoria do helpinho', 'Conhecendo o helpinho', 'Metas do helpinho', 'Revisando'];
     public valores = [5000, 1000, 2000, 100000, 200000];
@@ -23,14 +26,9 @@ export class createHelpinhoComponent {
 
     form: FormGroup;
     submitted = false;
-    
-    titulo: string = '';
-    descricao: string = '';
-    image: File | null = null;
-    loggedUser: any;
-    previewContent: string = '';
-    previewImageUrl: string | ArrayBuffer | null = '';
 
+    loggedUser: any;
+    solicitation_helpinho: any = {};
     user: any[] = [];  
     constructor(private http: HttpClient, private authService: AuthService, private helpinhoService: LandingService,private route: ActivatedRoute,
         private router: Router,
@@ -58,63 +56,35 @@ export class createHelpinhoComponent {
         }
     }
 
-    onFileSelected(event: any): void {
-        this.form.value.image = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = () => {
-            this.previewImageUrl = reader.result;
-            console.log(this.previewImageUrl)
-        };
-  
-    }
-
-    updatePreview(): void {
-        this.previewContent = `
-            <h1>${this.form.value.titulo}</h1>
-            <p>${this.form.value.descricao}</p>
-            <img src="${this.form.value.image}" alt="Preview Image" style="max-width: 100%; height: auto;" />
-        `;
-      }
-
     async onSubmit(): Promise<void> {
-        this.toastr.success('Até breve');
 
-        console.log('aeee')
         this.submitted = true;
-        // if (this.form.invalid) {
-        //     return;
-        // }
-        //if (this.form.valid) {
+        if (this.form.invalid) {
+            return;
+        }
+        if (this.form.valid) {
 
-        const headers = new HttpHeaders({
-            'Authorization': `Bearer ${this.authService.getToken()}`
-        });
-            
-            console.log('enre')
-            const formData = new FormData();
-            formData.append('titulo', this.form.value.titulo);
-            formData.append('descricao', this.form.value.descricao);
-            formData.append('imagem', this.form.value.image);
-            formData.append('meta', this.form.value.descricao);
-            formData.append('solicitante', '1')
+            const headers = new HttpHeaders({
+                'Authorization': `Bearer ${this.authService.getToken()}`
+            });
+            this.form.value.doador_id = this.user[0].id
+            this.form.value.solicitacao_id = this.route.snapshot.params["id"]
+
             try {
-                this.http.post('http://localhost:3000/dev/helpinho/solicitation/create', formData, { headers }).subscribe(
+                this.http.post(`${this.apiUrl}/helpinho/create`, this.form.value, { headers }).subscribe(
                     (data) => {
-                        console.log(data)
+
+                        if(data){
+                            this.toastr.success('Parabéns! você ajudou o próximo!');
+                            this.router.navigate(['/home'])
+                        }
                     },
                 )
-                // if (!response.ok) {
-                //     throw new Error('Network response was not ok ' + response.statusText);
-                // }
-          
-                //const result =  response.json();
-                //console.log('Success:', result);
             } catch (error) {
                 console.error('Error:', error);
             }
+        }
     
-            console.log('Formulário enviado:', formData);
-       // }
     }
 
     logout() {    
@@ -122,22 +92,27 @@ export class createHelpinhoComponent {
     }
 
     async ngOnInit() {
-        this.getuser()  
-        //this.getSolicitacaoHelpinho(this.route.snapshot.params["id"]);
+        this.getAuthUser() 
+ 
+        this.getSolicitacaoHelpinho(this.route.snapshot.params["id"]);
 
     }
-    getTutorial(id: string): void {
-        // this.http.get(`${baseUrl}/${id}`);
-        // .subscribe({
-        //     next: (data) => {
-        //     this.currentTutorial = data;
-        //         console.log(data);
-        //     },
-        //     error: (e) => console.error(e)
-        // });
+    getSolicitacaoHelpinho(id: number) {
+        const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.authService.getToken()}`
+        });
+        this.http.get(`${this.apiUrl}/helpinho/solicitation/${id}`, {headers}).subscribe(
+            (data) => {
+                this.solicitation_helpinho = data;
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
     }
     
-    getuser() {
+    
+    getAuthUser() {
         this.helpinhoService.getuser().subscribe(
             (data) => {
                 this.user = data.users;

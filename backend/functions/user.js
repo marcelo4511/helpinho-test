@@ -55,7 +55,7 @@ module.exports.registerUser = async (data) => {
     if (password !== confirm_password) {
         return {
             statusCode: 400,
-            body: JSON.stringify({ message: 'as senhas não coincidem' }),
+            body: JSON.stringify('as senhas não coincidem'),
         };
     }
     const connection = await mysql.createConnection({
@@ -72,7 +72,7 @@ module.exports.registerUser = async (data) => {
         if (existingUsers.length > 0) {
             return {
                 statusCode: 400,
-                body: JSON.stringify({ message: 'e-mail já está cadastrado' }),
+                body: JSON.stringify('e-mail já está cadastrado'),
             };
         }
 
@@ -115,7 +115,7 @@ module.exports.registerUser = async (data) => {
 
         if (error) {
             return {
-                statusCode: 400,
+                statusCode: 500,
                 body: JSON.stringify({ message: error.details[0].message }),
             };
         }
@@ -128,14 +128,12 @@ module.exports.registerUser = async (data) => {
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
         });
-        // Consultar usuário no banco de dados
         const [rows] = await connection.query('SELECT * FROM users WHERE email = ?', [email]);
     
-        // Verificar se o usuário foi encontrado
         if (rows.length === 0) {
             return {
-                statusCode: 400,
-                body: JSON.stringify({ message: 'Usuário não encontrado' })
+                statusCode: 500,
+                body: JSON.stringify( 'Usuário não encontrado' )
             };
         }
   
@@ -143,11 +141,10 @@ module.exports.registerUser = async (data) => {
     
         // Verificar a senha
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        console.log(isPasswordValid)
         if (!isPasswordValid) {
             return {
-                statusCode: 400,
-                body: JSON.stringify({ message: 'Senha incorreta' })
+                statusCode: 500,
+                body: JSON.stringify('Senha incorreta')
             };
         }
   
@@ -164,7 +161,7 @@ module.exports.registerUser = async (data) => {
         } catch (error) {
         return {
             statusCode: 500,
-            body: JSON.stringify({ message: 'Erro no servidor' })
+            body: JSON.stringify('Erro no servidor')
         };
     }
 };

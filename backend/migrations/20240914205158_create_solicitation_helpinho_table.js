@@ -9,7 +9,8 @@ exports.up = function(knex) {
         table.string('descricao').notNullable();
         table.string('titulo').notNullable();
         table.decimal('meta', 14, 2).notNullable();
-        table.text('imagem').nullable();
+        table.string('categoria').notNullable();
+
     });
 };
 

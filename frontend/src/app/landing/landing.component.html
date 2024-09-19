@@ -31,10 +31,12 @@
             
             <div class="mt-5 align-items: center h-screen">
                 <img src="assets/passos.png" alt="Imagem" style="height: 100px;">
+                <div class="hidden lg:block">
 
-                <h1 class="xl text-4xl text-gray-700">Faça a diferencia com um helpinho</h1>
-                <p class="text-gray-700 mt-4 mb-4">Os helpinhos podem parecer pequenos, mas juntos fazem a <b class="text-pink-600">diferença na vida de todos</b></p>
-                <a routerLink="/register" class=" mt-4 inline-block text-sm px-4 py-2 bg-pink-600 border rounded rounded-lg text-slate-100 border-white mt-4 lg:mt-0 mr-2">Registre-se grátis</a>
+                    <h1 class="xl text-4xl text-gray-700">Faça a diferencia com um helpinho</h1>
+                    <p class="text-gray-700 mt-4 mb-4">Os helpinhos podem parecer pequenos, mas juntos fazem a <b class="text-pink-600">diferença na vida de todos</b></p>
+                    <a routerLink="/register" class=" mt-4 inline-block text-sm px-4 py-2 bg-pink-600 border rounded rounded-lg text-slate-100 border-white mt-4 lg:mt-0 mr-2">Registre-se grátis</a>
+                </div>
             </div>
             <div class="text-light bg-dark text-center d-flex align-items-center">
                 <div class="container" style="background-color: rgba(255, 255, 255, 0);">
@@ -43,48 +45,52 @@
             </div>
         </div>
     </nav>
-    <div class="mx-auto bg-white overflow-hidden flex justify-between p-5 mt-5 mb-5">
-        <div class="flex justify-between ml-2">
-            <div class="p-2">
-                <h1 class="text-pink-800 xl text-4xl font-bold" style="height: 40px;"> 1.</h1>
+    <div class="bg-white overflow-hidden p-5 mt-5 mb-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="flex items-center">
+                <div class="p-2">
+                    <h1 class="text-pink-800 text-4xl font-bold">1.</h1>
+                </div>
+                <div class="ml-2">
+                    <p class="text-red-600 font-bold">Escolha</p>
+                    <p class="text-gray-500">Escolha um helpinho que deseja ajudar</p>
+                </div>
             </div>
-            <div class="ml-2">
-                <p class="text-red-600 font-bold">Escolha</p>
-                <p class="text-gray-500">Escolha um helpinho que deseja ajudar</p>
+    
+            <div class="flex items-center">
+                <div class="p-2">
+                    <h1 class="text-pink-800 text-4xl font-bold">2.</h1>
+                </div>
+                <div class="ml-2">
+                    <p class="text-red-600 font-bold">Doe</p>
+                    <p class="text-gray-500">O valor é você que decide, e ele vai todo para quem escolher</p>
+                </div>
             </div>
-            
-            <div class="p-2">
-                <h1 class="text-pink-800 xl text-4xl font-bold" style="height: 40px;"> 2.</h1>
+    
+            <div class="flex items-center">
+                <div class="p-2">
+                    <h1 class="text-pink-800 text-4xl font-bold">3.</h1>
+                </div>
+                <div class="ml-2">
+                    <p class="text-red-600 font-bold">Aproveite</p>
+                    <p class="text-gray-500">Doar gera felicidade para você e para quem recebeu</p>
+                </div>
             </div>
-            
-            <div class="ml-2">
-                <p class="text-red-600 font-bold">Doe</p>
-                <p class="text-gray-500">O valor é você que decide, e ele vai todo para quem escolher</p>
-            </div>
-
-            <div class="p-2">
-                <h1 class="text-pink-800 xl text-4xl font-bold" style="height: 40px;"> 3.</h1>
-            </div>
-            
-            <div class="ml-2">
-                <p class="text-red-600 font-bold">Aproveite</p>
-                <p class="text-gray-500">Doar gera felicidade para você e para quem recebeu</p>
-            </div>
-
-            <div class="p-2">
-                <h1 class="text-pink-800 xl text-4xl font-bold" style="height: 40px;"> 4.</h1>
-            </div>
-            
-            <div class="ml-2">
-                <p class="text-red-600 font-bold">Acompanhe</p>
-                <p class="text-gray-500">Fique ligado, Acompanhe se o helpinho alcançou o objetivo</p>
+    
+            <div class="flex items-center">
+                <div class="p-2">
+                    <h1 class="text-pink-800 text-4xl font-bold">4.</h1>
+                </div>
+                <div class="ml-2">
+                    <p class="text-red-600 font-bold">Acompanhe</p>
+                    <p class="text-gray-500">Fique ligado, Acompanhe se o helpinho alcançou o objetivo</p>
+                </div>
             </div>
         </div>
-    
     </div>
     
     <div class="grid grid-cols-2 gap-2 m-4" id="pesquisa">
-
+        
         <form>   
             <label for="default-search" class="mt-4 mb-3 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
             <div class="relative">
@@ -93,47 +99,55 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                     </svg>
                 </div>
-                <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="quem vamos ajudar hoje ?" required />
+                <input type="search" [formControl]="searchControl" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="quem vamos ajudar hoje ?" required />
             </div>
         </form>
     
-        <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <select
+            [(ngModel)]="selectedCategory" (change)="filterHelpinhos()" 
+            id="countries" 
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
             <option selected>Escolha uma categoria</option>
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="FR">France</option>
-            <option value="DE">Germany</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
         </select>
     </div>
 
-    <div id="helpinho"  *ngIf="helpinhos.length > 0" class="grid grid-cols-3 gap-3 ">
+    <div id="helpinho">
+        <div *ngIf="helpinhosFiltrados.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 p-6">
+            <div *ngFor="let helpinho of helpinhosFiltrados" class=" max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-5 m-4">
+                <a>
+                    <img src="assets/card.png" class="rounded rounded-lg" alt="Example Image" height="auto" width="100%"/>
 
-    <div  *ngFor="let helpinho of helpinhos" class=" max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-5 m-4">
-        <a>
-            <img src="assets/card.png" class="rounded rounded-lg" alt="Example Image" height="auto" width="100%"/>
-        </a>
-        <div class="p-5">
-            <div class="mx-auto bg-white overflow-hidden flex justify-between mt-5 mb-5">
-                <div class="flex justify-between ml-2">
-                    <div class="p-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 object-cover rounded-full" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                        </svg>
+                </a>
+                <figcaption class="flex items-start justify-start m-4">
+                    <img class="rounded-full w-9 h-9" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/jese-leos.png" alt="profile picture">
+                    <div class="space-y-0.5 font-medium dark:text-white text-left rtl:text-right ms-3">
+                        <div>{{helpinho.nome}}</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400">{{helpinho.email}}</div>
                     </div>
-                    <div class="ml-2">
-                        <p class=" font-bold">{{ helpinho.nome }}</p>
-                        <p class="text-gray-500">{{ helpinho.email}}</p>
-                    </div>
+                </figcaption>
+                <div class="">
+                    <body class="">
+                        <div class="px-6 py-4">
+                            <div class="font-bold text-xl mb-2 text-gray-900">{{ helpinho.titulo}}</div>
+                            <p class="text-gray-700 text-base">
+                                {{helpinho.descricao}}.                                
+                            </p>
+                        </div>
+                        <div class="px-6 pt-3">
+                            <span class="inline-block bg-blue-200 text-blue-800 text-sm font-semibold mr-2 mb-2 px-2.5 py-0.5 rounded-full">{{helpinho.categoria}}</span>
+                        </div>
+                    </body>
+                    
                 </div>
-                
+                <button type="button" class="py-2 px-4 border border-pink-500 bg-gray-100 text-pink-600 rounded rounded-lg m-5" [routerLink]="['/criar/', helpinho.id]" >
+                    Contribuir
+                </button>
             </div>
-            <a>
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ helpinho.titulo}}</h5>
-            </a>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{helpinho.descricao}}.</p>
         </div>
+        <div class="m-4" *ngIf="helpinhosFiltrados.length == 0">Não há helpinhos disponíveis no momento</div>
     </div>
-</div>
 
     
 
